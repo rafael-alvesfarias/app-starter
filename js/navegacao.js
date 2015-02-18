@@ -1,4 +1,4 @@
-document.addEventListener("keydown", navegar);
+var selecionado;
 
 function navegar(event){
 	console.log(event);
@@ -79,3 +79,5 @@ function selecionar(elemento){
 	addClass(elemento,"selecionado");
 	selecionado = elemento;
 }
+
+document.addEventListener("keydown", navegar);

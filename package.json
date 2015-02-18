@@ -2,7 +2,7 @@
 	"name":"windows-startup",
 	"window":{
 		"toolbar":false,
-		"fullscreen":true
+		"fullscreen":false
 	},
 	"main":"index.html"
 }
