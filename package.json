@@ -1,0 +1,8 @@
+{
+	"name":"windows-startup",
+	"window":{
+		"toolbar":false,
+		"fullscreen":true
+	},
+	"main":"index.html"
+}

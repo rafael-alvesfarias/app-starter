@@ -1,0 +1,60 @@
+<html>
+<head>
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+	<script type="text/javascript" src="js/navegacao.js"></script>
+	<script>
+		var exec = require('child_process').exec;
+		var popcornLocation = '\"apps\\PopcornTime.lnk\"';
+		var mediaBrowserLoc = '\"apps\\MBClassic.lnk\"';
+		var steamLocation = '\"apps\\Steam.lnk\"';
+
+		var gui = require('nw.gui');
+		var win = gui.Window.get();
+		var selecionado;
+		
+		win.on('close', function() {
+  			this.hide();
+  			console.log("We're closing...");
+  			this.close(true);
+		});
+		
+		function executarComando(comando){
+			exec(comando, function(error, stdout, stderr){
+				console.log(stdout);
+			});
+		}
+
+		function fechar(){
+			win.close();
+		}		
+	</script>
+</head>
+<body>
+	<div class="menu-superior">
+		<ul>
+			<li>
+				<div class="button button-32" id="menu-1">
+					<a href="#"><img src="resources/imagens/config.png"></a>
+				</div>
+			</li>
+			<li>
+				<div class="button button-32" id="menu-2" onclick="fechar();">
+					<a href="#" ><img src="resources/imagens/close.png"></a>
+				</div>
+			</li>
+		</ul>
+	</div>
+	<h1>Hello World</h1>
+	<div class="apps">
+		<div class="app button" id="app-1" onclick="executarComando(popcornLocation)">
+			<img src="resources/imagens/popcorn.png">
+		</div>
+		<div class="app button" id="app-2" onclick="executarComando(mediaBrowserLoc)">
+			<img src="resources/imagens/mediabrowser.png">
+		</div>
+		<div class="app button" id="app-3" onclick="executarComando(steamLocation)">
+			<img src="resources/imagens/steam.png">
+		</div>
+	</div>
+</body>
+</html>
