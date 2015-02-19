@@ -5,46 +5,46 @@ function navegar(event){
 	switch(event.keyCode){
 		case 37: 
 			if(selecionado){
-				arrayId = selecionado.id.split("-");
+				arrayId = selecionado.attr("id").split("-");
 				tipo = arrayId[0];
 				indice = parseInt(arrayId[1]);
-				elementoAnterior = document.getElementById(tipo+"-"+(indice-1));
-				if(elementoAnterior){
+				elementoAnterior = $("#" + tipo + "-" + (indice-1));
+				if(elementoAnterior.length){
 					selecionar(elementoAnterior);
 				}
 			}else{
-				selecionar(document.getElementById("app-1"));
+				selecionar($("#app-1"));
 			}
 		break;
 		case 38:
 			if(selecionado){
-				if(selecionado.id.split("-")[0] == "app"){
-					selecionar(document.getElementById("menu-1"));
+				if(selecionado.attr("id").split("-")[0] == "app"){
+					selecionar($("#menu-1"));
 				}
 			}else{
-				selecionar(document.getElementById("app-1"));
+				selecionar($("#app-1"));
 			}
 		break;
 		case 39:
 			if(selecionado){
-				arrayId = selecionado.id.split("-");
+				arrayId = selecionado.attr("id").split("-");
 				tipo = arrayId[0];
 				indice = parseInt(arrayId[1]);
-				proxElemento = document.getElementById(tipo+"-"+(indice+1));
-				if(proxElemento){
+				proxElemento = $("#" + tipo + "-" + (indice+1));
+				if(proxElemento.length){
 					selecionar(proxElemento);
 				}
 			}else{
-				selecionar(document.getElementById("app-1"));
+				selecionar($("#app-1"));
 			}
 		break;
 		case 40:
 			if(selecionado){
-				if(selecionado.id.split("-")[0] == "menu"){
-					selecionar(document.getElementById("app-1"));
+				if(selecionado.attr("id").split("-")[0] == "menu"){
+					selecionar($("#app-1"));
 				}
 			}else{
-				selecionar(document.getElementById("app-1"));
+				selecionar($("#app-1"));
 			}
 		break;
 		case 13:{
@@ -55,28 +55,19 @@ function navegar(event){
 	}
 }
 
-//TODO MUDAR PARA JQUERY
-
-function hasClass(ele,cls) {
-	return ele.className.match(new RegExp('(\\s|^)'+cls+'(\\s|$)'));
-}
-
-function addClass(ele,cls) {
-	if (!this.hasClass(ele,cls)) ele.className += " "+cls;
-}
-
-function removeClass(ele,cls) {
-	if (hasClass(ele,cls)) {
-		var reg = new RegExp('(\\s|^)'+cls+'(\\s|$)');
-		ele.className=ele.className.replace(reg,' ');
-	}
-}
-
 function selecionar(elemento){
 	if(selecionado){
-		removeClass(selecionado, "selecionado");
+		if(selecionado.attr("id").split("-")[0] == "menu"){
+			selecionado.attr("class", selecionado.attr("class").replace("-selecionado",""));
+		}else{
+			selecionado.removeClass("selecionado");
+		}
 	}
-	addClass(elemento,"selecionado");
+	if(elemento.attr("id").split("-")[0] == "menu"){
+		elemento.attr("class", elemento.attr("class") + "-selecionado");
+	}else{
+		elemento.addClass("selecionado");
+	}
 	selecionado = elemento;
 }
 

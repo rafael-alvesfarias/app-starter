@@ -1,6 +1,7 @@
 <html>
 <head>
 	<link rel="stylesheet" type="text/css" href="css/style.css">
+	<script type="text/javascript" src="js/jquery-1.11.2.js"></script>
 	<script type="text/javascript" src="js/navegacao.js"></script>
 	<script>
 		var executor = require('executorComandos.js');
@@ -26,14 +27,10 @@
 	<div class="menu-superior">
 		<ul>
 			<li>
-				<div class="button button-32" id="menu-1">
-					<a href="#"><img src="resources/imagens/config.png"></a>
-				</div>
+				<div class="botao-config" id="menu-1"></div>
 			</li>
 			<li>
-				<div class="button button-32" id="menu-2" onclick="fechar();">
-					<a href="#" ><img src="resources/imagens/close.png"></a>
-				</div>
+				<div class="botao-fechar" id="menu-2" onclick="fechar();"></div>
 			</li>
 		</ul>
 	</div>

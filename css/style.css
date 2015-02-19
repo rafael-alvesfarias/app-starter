@@ -10,7 +10,7 @@
 
 body{
 	height: 100%;
-	background-image: url(../resources/imagens/bg-full.jpg);
+	background-image: url(../resources/imagens/wallpaper1.jpg);
 }
 
 .apps{
@@ -39,12 +39,12 @@ body{
 	background-repeat: no-repeat;
 }
 
-.button-32{
-	background-size: 32px, 32px;
-}
-
 .button:hover, .selecionado{
 	background-image: url(../resources/imagens/button2.png);
+	background-size: 286px, 286px;
+	width: 286px;
+	height: 286px;
+	-webkit-animation: myfirst 0.3s;
 }
 
 .menu-superior{
@@ -63,4 +63,41 @@ body{
 .menu-superior div{
 	float: left;
 	margin: 5px;
+}
+
+.botao-fechar, .botao-fechar-selecionado{
+	background-image: url(../resources/imagens/shutdown2.png);
+	background-repeat: no-repeat;
+	background-size: 32px, 32px;
+	width: 32px;
+	height: 32px;
+}
+
+.botao-fechar:hover, .botao-fechar-selecionado{
+	background-image: url(../resources/imagens/shutdown1.png);
+}
+
+.botao-config, .botao-config-selecionado{
+	background-image: url(../resources/imagens/config2.png);
+	background-repeat: no-repeat;
+	background-size: 32px, 32px;
+	width: 32px;
+	height: 32px;
+}
+
+.botao-config:hover, .botao-config-selecionado{
+	background-image: url(../resources/imagens/config1.png);
+}
+
+@-webkit-keyframes myfirst {
+    from {
+    background-size: 256px, 256px;
+	width: 256px;
+	height: 256px;
+	}
+    to {
+    background-size: 286px, 286px;
+	width: 286px;
+	height: 286px;
+	}
 }
