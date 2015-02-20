@@ -17,6 +17,10 @@
   			console.log("We're closing...");
   			this.close(true);
 		});
+		
+		win.on('loaded',function(){
+			console.log("loaded");
+		})
 
 		function fechar(){
 			win.close();
@@ -25,16 +29,11 @@
 </head>
 <body>
 	<div class="menu-superior">
-		<ul>
-			<li>
-				<div class="botao-config" id="menu-1"></div>
-			</li>
-			<li>
-				<div class="botao-fechar" id="menu-2" onclick="fechar();"></div>
-			</li>
-		</ul>
+			<div class="botao-config" id="menu-1"></div>
+			<div class="botao-fechar" id="menu-2" onclick="fechar();"></div>
 	</div>
-	<h1>Hello World</h1>
+	<div style="clear:both;"></div>
+	<div class="app-selecionada"><h1>Popcorn Time</h1></div>
 	<div class="apps">
 		<div class="app button" id="app-1" onclick="executor('popcornLocation').executar();">
 			<img src="resources/imagens/popcorn.png">

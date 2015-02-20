@@ -17,7 +17,6 @@ body{
 	width: 960px;
 	top:50;
 	margin: 0 auto;
-	margin-top: 200px;
 }
 
 .apps img{
@@ -41,23 +40,21 @@ body{
 
 .button:hover, .selecionado{
 	background-image: url(../resources/imagens/button2.png);
-	background-size: 286px, 286px;
-	width: 286px;
-	height: 286px;
-	-webkit-animation: myfirst 0.3s;
+	background-size: 266px, 266px;
+	width: 266px;
+	height: 266px;
+	-webkit-animation: botaoAnim 0.3s;
+}
+
+.button:hover img, .selecionado img{
+	height: 246px;
+	width: 246px;
+	-webkit-animation: appAnim 0.3s;
 }
 
 .menu-superior{
 	float: right;
 	color: white;
-}
-
-.menu-superior ul{
-	list-style: none;
-}
-
-.menu-superior ul li{
-	display: inline;
 }
 
 .menu-superior div{
@@ -89,15 +86,42 @@ body{
 	background-image: url(../resources/imagens/config1.png);
 }
 
-@-webkit-keyframes myfirst {
+@-webkit-keyframes botaoAnim {
     from {
     background-size: 256px, 256px;
 	width: 256px;
 	height: 256px;
 	}
     to {
-    background-size: 286px, 286px;
-	width: 286px;
-	height: 286px;
+    background-size: 266px, 266px;
+	width: 266px;
+	height: 266px;
 	}
+}
+
+@-webkit-keyframes appAnim {
+    from {
+    background-size: 256px, 256px;
+	width: 236px;
+	height: 236px;
+	}
+    to {
+    background-size: 266px, 266px;
+	width: 246px;
+	height: 246px;
+	}
+}
+
+.app-selecionada{
+	width: 400px;
+	margin: 0 auto;
+	margin-top: 150px;
+	margin-bottom: 20px;
+}
+
+.app-selecionada h1{
+	text-align: center;
+	color : white;
+	font-size: 26px;
+	font-weight: 700;
 }
