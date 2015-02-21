@@ -61,14 +61,15 @@ function selecionar(elemento){
 			selecionado.attr("class", selecionado.attr("class").replace("-selecionado",""));
 		}else{
 			selecionado.removeClass("selecionado");
+			$("#titulo-app-"+selecionado.attr("id").split("-")[1]).css("visibility","hidden");
 		}
 	}
 	if(elemento.attr("id").split("-")[0] == "menu"){
 		elemento.attr("class", elemento.attr("class") + "-selecionado");
 	}else{
 		elemento.addClass("selecionado");
+		$("#titulo-app-"+elemento.attr("id").split("-")[1]).css("visibility","visible");
+		playSound();
 	}
 	selecionado = elemento;
 }
-
-document.addEventListener("keydown", navegar);

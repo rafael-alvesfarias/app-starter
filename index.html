@@ -5,45 +5,65 @@
 	<script type="text/javascript" src="js/navegacao.js"></script>
 	<script>
 		var executor = require('executorComandos.js');
-		var popcornLocation = '\"apps\\PopcornTime.lnk\"';
-		var mediaBrowserLoc = '\"apps\\MBClassic.lnk\"';
-		var steamLocation = '\"apps\\Steam.lnk\"';
-
 		var gui = require('nw.gui');
 		var win = gui.Window.get();
+		var Mustache = require("mustache");
 		
 		win.on('close', function() {
   			this.hide();
-  			console.log("We're closing...");
   			this.close(true);
 		});
 		
 		win.on('loaded',function(){
 			console.log("loaded");
+			$(document).keydown(navegar);
+			$(".app").mouseenter(playSound);
+			montarApps();
 		})
 
 		function fechar(){
 			win.close();
-		}		
+		}
+		
+		function playSound(){
+			document.getElementById("som_cursor").play();
+		}
+		
+		function montarApps(){
+			var template = $("#template").html();
+			var view = require("./config/apps.json");
+			Mustache.parse(template);
+			var rendered = Mustache.render(template, view);
+			$("#target").html(rendered);
+		}
+	</script>
+	
+	<script id="template" type="x-tmpl-mustache">
+		<table>
+			<tr>
+				{{#apps}}
+					<td><div id="titulo-app-{{index}}" style="visibility: hidden;"><h1>{{nome}}</h1></div></td>
+				{{/apps}}
+			</tr>
+			<tr>
+				{{#apps}}
+					<td>
+						<div class="app button" id="app-{{index}}" onclick="executor('{{local}}').executar();" title="{{nome}}">
+							<img src="{{imagem}}">
+						</div>
+					</td>
+				{{/apps}}
+			</tr>
+		</table>
 	</script>
 </head>
 <body>
+	<audio src="resources/sons/cursor.ogg" id="som_cursor"></audio>
 	<div class="menu-superior">
 			<div class="botao-config" id="menu-1"></div>
 			<div class="botao-fechar" id="menu-2" onclick="fechar();"></div>
 	</div>
 	<div style="clear:both;"></div>
-	<div class="app-selecionada"><h1>Popcorn Time</h1></div>
-	<div class="apps">
-		<div class="app button" id="app-1" onclick="executor('popcornLocation').executar();">
-			<img src="resources/imagens/popcorn.png">
-		</div>
-		<div class="app button" id="app-2" onclick="executor(mediaBrowserLoc).executar();">
-			<img src="resources/imagens/mediabrowser.png">
-		</div>
-		<div class="app button" id="app-3" onclick="executor(steamLocation).executar();">
-			<img src="resources/imagens/steam.png">
-		</div>
-	</div>
+	<div class="apps" id="target"></div>
 </body>
 </html>

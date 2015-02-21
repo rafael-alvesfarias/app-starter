@@ -1,0 +1,22 @@
+{
+	"apps": [
+		{
+			"nome":"Popcorn Time",
+			"imagem":"resources/imagens/popcorn.png",
+			"local":"apps\\\\PopcornTime.lnk",
+			"index":1
+		},
+		{
+			"nome":"Media Browser",
+			"imagem":"resources/imagens/mediabrowser.png",
+			"local":"apps\\\\MBClassic.lnk",
+			"index":2
+		},
+		{
+			"nome":"Steam",
+			"imagem":"resources/imagens/steam.png",
+			"local":"apps\\\\Steam.lnk",
+			"index":3
+		}
+	]
+}

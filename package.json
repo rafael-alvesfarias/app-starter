@@ -1,5 +1,5 @@
 {
-	"name":"windows-startup",
+	"name":"app-starter",
 	"window":{
 		"toolbar":false,
 		"fullscreen":true

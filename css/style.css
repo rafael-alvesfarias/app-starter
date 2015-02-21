@@ -2,8 +2,7 @@
 *{
 	margin: 0;
 	padding: 0;
-	font-family: 'Source Sans Pro', sans-serif;
-	font-weight: 500;
+	font-family: 'Segoe UI', sans-serif; 
 	font-size: 11px;
 	line-height: 1.5;
 }
@@ -15,8 +14,8 @@ body{
 
 .apps{
 	width: 960px;
-	top:50;
 	margin: 0 auto;
+	padding-top: 150px
 }
 
 .apps img{
@@ -26,11 +25,18 @@ body{
 	opacity: 0.85;
 }
 
+.apps table{
+	width: 100%;
+}
+
+.app-row{
+	height: 280px;
+}
+
 .app{
-	float: left;
+	margin-left: 29px;
 	width: 256px;
 	height: 256px;
-	margin: 20px;
 }
 
 .button{
@@ -119,9 +125,9 @@ body{
 	margin-bottom: 20px;
 }
 
-.app-selecionada h1{
+h1{
 	text-align: center;
-	color : white;
-	font-size: 26px;
-	font-weight: 700;
+	color : #EEE;
+	font-size: 50px;
+	font-weight: 200;
 }
