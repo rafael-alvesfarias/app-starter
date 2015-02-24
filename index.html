@@ -15,11 +15,31 @@
 		});
 		
 		win.on('loaded',function(){
-			console.log("loaded");
 			$(document).keydown(navegar);
-			$(".app").mouseenter(playSound);
+
 			montarApps();
-		})
+
+			$(".app").mouseenter(playSound);
+
+			$(".app").on("ganhouSelecao", function(e){
+				$(this).addClass("selecionado");
+				$("#titulo-app-"+$(this).attr("id").split("-")[1]).css("visibility","visible");
+				playSound();
+			});
+
+			$(".menu").on("ganhouSelecao", function(e){
+				$(this).attr("class", $(this).attr("class") + "-selecionado");
+			});
+
+			$(".app").on("perdeuSelecao", function(e){
+				$(this).attr("class", $(this).attr("class").replace("-selecionado",""));
+			});
+
+			$(".menu").on("perdeuSelecao", function(e){
+				$(this).removeClass("selecionado");
+				$("#titulo-app-" + $(this).attr("id").split("-")[1]).css("visibility","hidden");
+			});
+		});
 
 		function fechar(){
 			win.close();
@@ -60,8 +80,8 @@
 <body>
 	<audio src="resources/sons/cursor.ogg" id="som_cursor"></audio>
 	<div class="menu-superior">
-			<div class="botao-config" id="menu-1"></div>
-			<div class="botao-fechar" id="menu-2" onclick="fechar();"></div>
+			<div class="menu botao-config" id="menu-1"></div>
+			<div class="menu botao-fechar" id="menu-2" onclick="fechar();"></div>
 	</div>
 	<div style="clear:both;"></div>
 	<div class="apps" id="target"></div>
