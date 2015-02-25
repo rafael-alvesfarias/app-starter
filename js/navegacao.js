@@ -4,9 +4,6 @@ Navegacao = function(primeiroElemento, seletores){
 	
 	for(i in seletores){
 		$(seletores[i]).each(function(index){
-			if(index == 0){
-				$(this).attr("primeiroDoSelector");
-			}
 			$(this).attr("horizontal-index", index);
 			$(this).attr("vertical-index", i);
 		});
