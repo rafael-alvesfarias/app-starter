@@ -59,7 +59,7 @@ Navegacao = function(primeiroElemento, seletores){
 					indiceVertical = parseInt(selecionado.attr("vertical-index"));
 					indiceHorizontal = parseInt(selecionado.attr("horizontal-index"));
 					elementoInferior = $("*[vertical-index='" + (indiceVertical + 1) + "'][horizontal-index='0']");
-					if(elementoSuperior.length){
+					if(elementoInferior.length){
 						selecionar(elementoInferior);
 					}
 				}else{
