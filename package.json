@@ -2,7 +2,7 @@
 	"name":"app-starter",
 	"window":{
 		"toolbar":true,
-		"fullscreen":true
+		"fullscreen":false
 	},
 	"main":"index.html"
 }

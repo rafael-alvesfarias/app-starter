@@ -3,7 +3,9 @@
 	margin: 0;
 	padding: 0;
 	font-family: 'Segoe UI', sans-serif; 
-	font-size: 11px;
+	font-size: 22px;
+	font-weight: 200;
+	color : #EEE;
 	line-height: 1.5;
 }
 
@@ -127,7 +129,11 @@ body{
 
 h1{
 	text-align: center;
-	color : #EEE;
 	font-size: 50px;
-	font-weight: 200;
+}
+
+.menu-lateral{
+	border: 1px dashed white;
+	width: 200px;
+	heigth: 100%;
 }

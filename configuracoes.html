@@ -4,61 +4,25 @@
 	<script type="text/javascript" src="js/jquery-1.11.2.js"></script>
 	<script type="text/javascript" src="js/navegacao.js"></script>
 	<script>
-		var executor = require('executorComandos.js');
 		var gui = require('nw.gui');
 		var win = gui.Window.get();
-		var Mustache = require("mustache");
-		
+				
 		win.on('close', function() {
   			this.hide();
   			this.close(true);
 		});
 		
 		win.on('loaded',function(){
-			console.log("loaded");
-			$(document).keydown(navegar);
-			$(".app").mouseenter(playSound);
-			montarApps();
-		})
+
+		});
 
 		function fechar(){
 			win.close();
 		}
 		
-		function config(){
-			gui.Window.open("configuracoes.html");
-		}
-		
 		function playSound(){
 			document.getElementById("som_cursor").play();
 		}
-		
-		function montarApps(){
-			var template = $("#template").html();
-			var view = require("./config/apps.json");
-			Mustache.parse(template);
-			var rendered = Mustache.render(template, view);
-			$("#target").html(rendered);
-		}
-	</script>
-	
-	<script id="template" type="x-tmpl-mustache">
-		<table>
-			<tr>
-				{{#apps}}
-					<td><div id="titulo-app-{{index}}" style="visibility: hidden;"><h1>{{nome}}</h1></div></td>
-				{{/apps}}
-			</tr>
-			<tr>
-				{{#apps}}
-					<td>
-						<div class="app button" id="app-{{index}}" onclick="executor('{{local}}').executar();" title="{{nome}}">
-							<img src="{{imagem}}">
-						</div>
-					</td>
-				{{/apps}}
-			</tr>
-		</table>
 	</script>
 </head>
 <body>
@@ -68,6 +32,16 @@
 			<div class="botao-fechar" id="menu-2" onclick="fechar();"></div>
 	</div>
 	<div style="clear:both;"></div>
-	<div class="apps" id="target"></div>
+	<h1>Configura&ccedil;&otilde;es</h1>
+	<div class="configuracoes">
+		<div class="menu-lateral">
+			<ul>
+				<li><a href="#">Aplicativos</a></li>
+				<li><a href="#">Apar&ecirc;ncia</a>
+			</ul>
+		</div>
+		<div class="configurar">
+		</div>
+	</div>
 </body>
 </html>

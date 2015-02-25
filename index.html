@@ -44,6 +44,11 @@
 		function fechar(){
 			win.close();
 		}
+
+		function config(){
+			win.hide();
+			gui.Window.open("configuracoes.html");
+		}
 		
 		function playSound(){
 			document.getElementById("som_cursor").play();
@@ -80,7 +85,7 @@
 <body>
 	<audio src="resources/sons/cursor.ogg" id="som_cursor"></audio>
 	<div class="menu-superior">
-			<div class="menu botao-config" id="menu-1"></div>
+			<div class="menu botao-config" id="menu-1" onclick="config();"></div>
 			<div class="menu botao-fechar" id="menu-2" onclick="fechar();"></div>
 	</div>
 	<div style="clear:both;"></div>
