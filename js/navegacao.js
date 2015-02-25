@@ -75,10 +75,6 @@ Navegacao = function(primeiroElemento, seletores){
 	}
 }
 
-function navegar(event){
-	
-}
-
 function selecionar(elemento){
 	if(selecionado){
 		selecionado.trigger("perdeuSelecao");
