@@ -46,8 +46,11 @@
 		}
 
 		function config(){
-			win.hide();
-			gui.Window.open("configuracoes.html");
+			win.close();
+			gui.Window.open('configuracoes.html', {
+				  fullscreen: true,
+				  toolbar: true
+			});
 		}
 		
 		function playSound(){
