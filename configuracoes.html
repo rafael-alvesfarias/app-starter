@@ -6,6 +6,8 @@
 	<script>
 		var gui = require('nw.gui');
 		var win = gui.Window.get();
+		var Mustache = require("mustache");
+		var fs = require("fs");
 				
 		win.on('close', function() {
   			this.hide();
@@ -13,7 +15,31 @@
 		});
 		
 		win.on('loaded',function(){
+			var navegacao = new Navegacao($('#menuApps'), voltar);
+			navegacao.adicionarNavegacao(".menu")
+			.adicionarNavegacao(".menuConfig", true);
+			$(document).keydown(navegacao.navegar);
+			
+			$(".menuConfig").mouseenter(playSound);
+			
+			$(".menuConfig").on("ganhouSelecao", function(e){
+				$(this).addClass("menuConfigSelecionado");
+				$(this).click();
+				playSound();
+			});
+			
+			$(".menuConfig").on("perdeuSelecao", function(e){
+				$(this).removeClass("menuConfigSelecionado");
+				playSound();
+			});
+			
+			$(".menu").on("ganhouSelecao", function(e){
+				$(this).attr("class", $(this).attr("class") + "-selecionado");
+			});
 
+			$(".menu").on("perdeuSelecao", function(e){
+				$(this).attr("class", $(this).attr("class").replace("-selecionado",""));
+			});
 		});
 
 		function fechar(){
@@ -23,31 +49,185 @@
 		function playSound(){
 			document.getElementById("som_cursor").play();
 		}
+		
+		function mostrarAba(elemento){
+			$(".aba").css("display","none");
+			$("#"+$(elemento).attr("id-aba")).fadeIn();
+		}
+		
+		function montarTabela(){
+			var fs = require("fs");
+			var template = $("#tmplApps").html();
+			var view = JSON.parse(fs.readFileSync('config/apps.json', 'utf8'));
+			console.log(view);
+			Mustache.parse(template);
+			var rendered = Mustache.render(template, view);
+			$("#aplicativos").html(rendered);
+		}
+		
+		function novaApp(){
+			$(".aba").css("display","none");
+			$("#novaApp").fadeIn();
+		}
+		
+		function excluirApp(id){
+			var json = JSON.parse(fs.readFileSync('config/apps.json', 'utf8'));
+			var novasApps = {"apps":[]};
+			var newIndex = 0;
+			$(json.apps).each(function(){
+				if(this.index != id){
+					var novaApp = new Object();
+					novaApp.local = this.local;
+					novaApp.nome = this.nome;
+					novaApp.index = newIndex + 1;
+					novaApp.imagem = this.imagem;
+					novasApps.apps[newIndex] = novaApp;
+					newIndex++;
+				}
+			});
+			
+			escreverArquivo(novasApps,function(err){
+				if(err) {
+			        console.log(err);
+			    } else {
+					montarTabela();
+					mostrarAba($("#menuApps"));
+			    }
+			});
+		}
+		
+		function salvar(){
+			var json = JSON.parse(fs.readFileSync('config/apps.json', 'utf8'));
+			var form = document.forms[0];
+			var app = new Object();
+			app.nome = form.nome.value;
+			app.local = replaceAll(form.local.value, "\\", "/");
+			app.imagem = form.imagem.value;
+			app.index = json.apps.length + 1;
+			json.apps[json.apps.length] = app;
+			console.log(json);
+			
+			escreverArquivo(json,function(err){
+				if(err) {
+			        console.log(err);
+			    } else {
+					montarTabela();
+					mostrarAba($("#menuApps"));
+			    }
+			});
+			
+
+		}
+		
+		function escreverArquivo(json, callback){
+			var fileName = "config/apps.json";
+			
+			fs.writeFile(fileName, JSON.stringify(json), callback);
+		}
+		
+		
+		function carregarLink(chooser){
+			$("#txtLocal").val($(chooser).val());
+		}
+		
+		function carregarImagem(chooser){
+			$("#previewImg").attr("src", $(chooser).val());
+		}
+		
+		function voltar(){
+			console.log("voltando...");
+			win.close();
+			gui.Window.open('index.html', {
+				  fullscreen: true,
+				  toolbar: false
+			});
+		}
+		
+		function replaceAll(str, de, para){
+		    var pos = str.indexOf(de);
+		    while (pos > -1){
+				str = str.replace(de, para);
+				pos = str.indexOf(de);
+			}
+		    return (str);
+		}
 	</script>
 </head>
 <body>
 	<audio src="resources/sons/cursor.ogg" id="som_cursor"></audio>
 	<div class="menu-superior">
-			<div class="botao-config" id="menu-1" onclick="config();"></div>
-			<div class="botao-fechar" id="menu-2" onclick="fechar();"></div>
+		<div class="menu botao-fechar" id="menu-2" onclick="fechar();"></div>
 	</div>
 	<div style="clear:both;"></div>
 	<div class="titulo">
-		<h1>Configura&ccedil;&otilde;es</h1>
+		<h1>Configurações</h1>
 	</div>
 	<div class="configuracoes">
 		<div class="menu-lateral">
 			<ul>
-				<li><a href="#">Aplicativos</a></li>
-				<li><a href="#">Apar&ecirc;ncia</a>
+				<li id="menuApps" class="menuConfig" id-aba="aplicativos" onclick="montarTabela();mostrarAba(this);"><a href="#">Aplicativos</a></li>
+				<li id="menuAparencia" class="menuConfig" ida-aba="aparencia" onclick="mostrarAba(this);"><a href="#">Aparência</a>
 			</ul>
 		</div>
 		<div class="configurar">
-			<div id="aplicativos">
-				
+			<script type="x-tmpl-mustache" id="tmplApps">
+				<h2>Aplicativos</h2>
+				<table>
+					<thead>
+						<tr>
+							<th>Nome</th>
+							<th>Local</th>
+							<th>Imagem</th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						{{#apps}}
+							<tr>
+								<td>{{nome}}</td>
+								<td>{{local}}</td>
+								<td><img class="img-app" src="{{imagem}}"></td>
+								<td><a href="#" onclick="excluirApp({{index}})"><img class="img-excluir" src="resources/imagens/excluir.png"></a></td>
+							</tr>
+						{{/apps}}
+					</tbody>
+				</table>
+				<div class="botoes">
+					<input type="button" onclick="novaApp()" value="Novo">
+				</div>
+			</script>
+			<div class="aba" id="aplicativos" style="display:none"></div>
+			<div class="aba" id="novaApp" style="display:none">
+				<h2>Novo Aplicativo</h2>
+				<form id="frmNovaApp">
+					<table>
+						<tbody>
+							<tr>
+								<td>Nome:</td><td><input type="text" id="nome" name="nome" style="width:300px;"/></td>
+							</tr>
+							<tr>
+								<td>Local:</td>
+								<td style="display:inline;width:520px;" >
+									<input type="file" style="display:none;" id="local" name="local" onchange="carregarLink(this);" accept=".lnk">
+									<input type="text" id="txtLocal" disabled="disabled" style="width:500px;">
+								</td>
+								<td><a href="#" onclick="$('#local').click();"><img class="img-app" src="resources/imagens/upload.png"></a></td>
+							</tr>
+							<tr>
+								<td>Imagem:</td>
+								<td>
+									<input type="file" style="display:none;" id="imagem" name="imagem" onchange="carregarImagem(this)" accept=".png"/>
+									<a href="#" onclick="$('#imagem').click();"><img class="img-app" id="previewImg" src="resources/imagens/upload.png"></a>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</form>
+				<div class="botoes">
+					<input type="button" onclick="salvar()" value="Salvar">
+				</div>
 			</div>
-			<div id="aparencia" style="display:none;">
-			</div>
+			<div class="aba" id="aparencia" style="display:none;"></div>
 		</div>
 	</div>
 </body>
