@@ -1,17 +1,26 @@
 var selecionado;
 
-Navegacao = function(primeiroElemento, seletores){
+Navegacao = function(primeiroElemento, funcaoVoltar){
 	
-	for(i in seletores){
-		$(seletores[i]).each(function(index){
-			$(this).attr("horizontal-index", index);
-			$(this).attr("vertical-index", i);
-		});
-	}
+	this.verticalIndex = 0;
 	
-	
-	//TODO montar a navegação para os elementos encontrados pelo seletor
-	
+	this.adicionarNavegacao = function(seletor, isVertical){
+		var elementos = $(seletor);
+		if(!isVertical){
+			for(index = 0; index < elementos.length;  index++){
+				$(elementos[index]).attr("horizontal-index", index);
+				$(elementos[index]).attr("vertical-index", this.verticalIndex);
+			}
+		this.verticalIndex++;
+		}else{
+			for(index = 0; index < elementos.length;  index++){
+				$(elementos[index]).attr("horizontal-index", 0);
+				$(elementos[index]).attr("vertical-index", this.verticalIndex);
+				this.verticalIndex++;
+			}
+		}
+		return this;
+	};	
 	
 	this.navegar = function(event){
 		switch(event.keyCode){
@@ -68,8 +77,13 @@ Navegacao = function(primeiroElemento, seletores){
 					selecionado.click();
 				}
 			break;
+			case 8:
+				if(funcaoVoltar){
+					funcaoVoltar();
+				}
+			break;
 		}
-	}
+	};
 }
 
 function selecionar(elemento){

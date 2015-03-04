@@ -8,6 +8,7 @@
 		var gui = require('nw.gui');
 		var win = gui.Window.get();
 		var Mustache = require("mustache");
+		var fs = require("fs");
 		
 		win.on('close', function() {
   			this.hide();
@@ -17,7 +18,12 @@
 		win.on('loaded',function(){
 			montarApps();
 			
-			$(document).keydown(new Navegacao($('#app-1'),[".menu",".app"]).navegar);
+			var navegacao = new Navegacao($('#app-1'));
+			navegacao
+				.adicionarNavegacao(".menu")
+				.adicionarNavegacao(".app");
+			
+			$(document).keydown(navegacao.navegar);
 
 			$(".app").mouseenter(playSound);
 
@@ -46,8 +52,11 @@
 		}
 
 		function config(){
-			win.hide();
-			gui.Window.open("configuracoes.html");
+			win.close();
+			gui.Window.open('configuracoes.html', {
+				  fullscreen: true,
+				  toolbar: false
+			});
 		}
 		
 		function playSound(){
@@ -56,7 +65,7 @@
 		
 		function montarApps(){
 			var template = $("#template").html();
-			var view = require("./config/apps.json");
+			var view = JSON.parse(fs.readFileSync('config/apps.json', 'utf8'));
 			Mustache.parse(template);
 			var rendered = Mustache.render(template, view);
 			$("#target").html(rendered);
@@ -65,11 +74,14 @@
 	
 	<script id="template" type="x-tmpl-mustache">
 		<table>
+			<thead>
 			<tr>
 				{{#apps}}
 					<td><div id="titulo-app-{{index}}" style="visibility: hidden;"><h1>{{nome}}</h1></div></td>
 				{{/apps}}
 			</tr>
+			</thead>
+			<tbody>
 			<tr>
 				{{#apps}}
 					<td>
@@ -79,6 +91,7 @@
 					</td>
 				{{/apps}}
 			</tr>
+			<tbody>
 		</table>
 	</script>
 </head>
