@@ -1,6 +1,7 @@
 <html>
 <head>
-	<link rel="stylesheet" type="text/css" href="css/style.css">
+	<link rel="stylesheet" type="text/css" href="css/cabecalho.css">
+	<link rel="stylesheet" type="text/css" href="css/configuracoes.css">
 	<script type="text/javascript" src="js/jquery-1.11.2.js"></script>
 	<script type="text/javascript" src="js/navegacao.js"></script>
 	<script>
@@ -14,7 +15,8 @@
   			this.close(true);
 		});
 		
-		win.on('loaded',function(){
+		$(document).ready(function(){
+			alert(navegacao);
 			var navegacao = new Navegacao(document, $('#menuApps'));
 			navegacao
 				.adicionarNavegacao(".menu")
@@ -71,7 +73,6 @@
 			var fs = require("fs");
 			var template = $("#tmplApps").html();
 			var view = JSON.parse(fs.readFileSync('config/apps.json', 'utf8'));
-			console.log(view);
 			Mustache.parse(template);
 			var rendered = Mustache.render(template, view);
 			$("#aplicativos").html(rendered);
@@ -181,13 +182,13 @@
 	</div>
 	<div style="clear:both;"></div>
 	<div class="titulo">
-		<h1>Configurações</h1>
+		<h1>Configuraï¿½ï¿½es</h1>
 	</div>
 	<div class="configuracoes">
 		<div class="menu-lateral">
 			<ul>
 				<li id="menuApps" class="menuConfig" id-aba="aplicativos" onclick="montarTabela();mostrarAba(this);"><a href="#">Aplicativos</a></li>
-				<li id="menuAparencia" class="menuConfig" id-aba="aparencia" onclick="mostrarAba(this);"><a href="#">Aparência</a>
+				<li id="menuAparencia" class="menuConfig" id-aba="aparencia" onclick="mostrarAba(this);"><a href="#">Aparï¿½ncia</a>
 			</ul>
 		</div>
 		<div class="configurar">
@@ -249,7 +250,7 @@
 				</div>
 			</div>
 			<div class="aba" id="aparencia" style="display:none;">
-				<h2>Aparência</h2>
+				<h2>Aparï¿½ncia</h2>
 				<form>
 					<table>
 						<tr>
@@ -266,7 +267,6 @@
 					<input type="button" onclick="salvarConfiguracoes()" value="Salvar">
 				</div>
 			</div>
-			<input type="button" onclick="voltar();" value="voltar">
 		</div>
 	</div>
 </body>

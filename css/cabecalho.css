@@ -1,0 +1,33 @@
+.menu-superior{
+	float: right;
+	color: white;
+}
+
+.menu-superior div{
+	float: left;
+	margin: 5px;
+}
+
+.botao-fechar, .botao-fechar-selecionado{
+	background-image: url(../resources/imagens/shutdown2.png);
+	background-repeat: no-repeat;
+	background-size: 44px, 44px;
+	width: 44px;
+	height: 44px;
+}
+
+.botao-fechar:hover, .botao-fechar-selecionado{
+	background-image: url(../resources/imagens/shutdown1.png);
+}
+
+.botao-config, .botao-config-selecionado{
+	background-image: url(../resources/imagens/config2.png);
+	background-repeat: no-repeat;
+	background-size: 44px, 44px;
+	width: 44px;
+	height: 44px;
+}
+
+.botao-config:hover, .botao-config-selecionado{
+	background-image: url(../resources/imagens/config1.png);
+}

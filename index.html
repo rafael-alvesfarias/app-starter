@@ -1,5 +1,6 @@
 <html>
 <head>
+	<link rel="stylesheet" type="text/css" href="css/cabecalho.css">
 	<link rel="stylesheet" type="text/css" href="css/style.css">
 	<script type="text/javascript" src="js/jquery-1.11.2.js"></script>
 	<script type="text/javascript" src="js/navegacao.js"></script>
@@ -15,7 +16,7 @@
   			this.close(true);
 		});
 		
-		win.on('loaded',function(){
+		$(document).ready(function(){
 			configurar();
 			
 			montarApps();
