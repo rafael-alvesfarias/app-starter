@@ -15,10 +15,22 @@
 		});
 		
 		win.on('loaded',function(){
-			var navegacao = new Navegacao($('#menuApps'), voltar);
-			navegacao.adicionarNavegacao(".menu")
-			.adicionarNavegacao(".menuConfig", true);
-			$(document).keydown(navegacao.navegar);
+			var navegacao = new Navegacao(document, $('#menuApps'));
+			navegacao
+				.adicionarNavegacao(".menu")
+				.adicionarNavegacao(".menuConfig", true)
+				.navegar();
+			
+			$(document).on("voltar", function(){
+				console.log("voltando...");
+				if(!$("input:focus").length){
+					win.close();
+					gui.Window.open('index.html', {
+						  fullscreen: true,
+						  toolbar: false
+					});
+				}
+			});
 			
 			$(".menuConfig").mouseenter(playSound);
 			
@@ -86,7 +98,7 @@
 				}
 			});
 			
-			escreverArquivo(novasApps,function(err){
+			escreverArquivo(novasApps, "config/apps.json", function(err){
 				if(err) {
 			        console.log(err);
 			    } else {
@@ -107,7 +119,23 @@
 			json.apps[json.apps.length] = app;
 			console.log(json);
 			
-			escreverArquivo(json,function(err){
+			escreverArquivo(json, "config/apps.json", function(err){
+				if(err) { 
+			        console.log(err);
+			    } else {
+					montarTabela();
+					mostrarAba($("#menuApps"));
+			    }
+			});
+		}
+		
+		function salvarConfiguracoes(){
+			var json = JSON.parse(fs.readFileSync('config/config.json', 'utf8'));
+			var form = document.forms[1];
+			var config = new Object();
+			json.background = replaceAll(replaceAll(form.background.value, "\\", "/")," ","%20");
+			
+			escreverArquivo(json, "config/config.json", function(err){
 				if(err) {
 			        console.log(err);
 			    } else {
@@ -115,12 +143,10 @@
 					mostrarAba($("#menuApps"));
 			    }
 			});
-			
-
 		}
 		
-		function escreverArquivo(json, callback){
-			var fileName = "config/apps.json";
+		function escreverArquivo(json, arquivo, callback){
+			var fileName = arquivo;
 			
 			fs.writeFile(fileName, JSON.stringify(json), callback);
 		}
@@ -130,17 +156,12 @@
 			$("#txtLocal").val($(chooser).val());
 		}
 		
-		function carregarImagem(chooser){
-			$("#previewImg").attr("src", $(chooser).val());
+		function carregarBackground(chooser){
+			$("#txtBackground").val($(chooser).val());
 		}
 		
-		function voltar(){
-			console.log("voltando...");
-			win.close();
-			gui.Window.open('index.html', {
-				  fullscreen: true,
-				  toolbar: false
-			});
+		function carregarImagem(chooser){
+			$("#previewImg").attr("src", $(chooser).val());
 		}
 		
 		function replaceAll(str, de, para){
@@ -166,7 +187,7 @@
 		<div class="menu-lateral">
 			<ul>
 				<li id="menuApps" class="menuConfig" id-aba="aplicativos" onclick="montarTabela();mostrarAba(this);"><a href="#">Aplicativos</a></li>
-				<li id="menuAparencia" class="menuConfig" ida-aba="aparencia" onclick="mostrarAba(this);"><a href="#">Aparência</a>
+				<li id="menuAparencia" class="menuConfig" id-aba="aparencia" onclick="mostrarAba(this);"><a href="#">Aparência</a>
 			</ul>
 		</div>
 		<div class="configurar">
@@ -227,7 +248,25 @@
 					<input type="button" onclick="salvar()" value="Salvar">
 				</div>
 			</div>
-			<div class="aba" id="aparencia" style="display:none;"></div>
+			<div class="aba" id="aparencia" style="display:none;">
+				<h2>Aparência</h2>
+				<form>
+					<table>
+						<tr>
+							<td>Papel de parede:</td>
+							<td style="display:inline;width:520px;" >
+								<input type="file" style="display:none;" id="background" name="background" onchange="carregarBackground(this);">
+								<input type="text" id="txtBackground" disabled="disabled" style="width:500px;">
+							</td>
+							<td><a href="#" onclick="$('#background').click();"><img class="img-app" src="resources/imagens/upload.png"></a></td>
+						</tr>
+					</table>
+				</form>
+				<div class="botoes">
+					<input type="button" onclick="salvarConfiguracoes()" value="Salvar">
+				</div>
+			</div>
+			<input type="button" onclick="voltar();" value="voltar">
 		</div>
 	</div>
 </body>
