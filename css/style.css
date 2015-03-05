@@ -9,11 +9,7 @@
 	line-height: 1.5;
 }
 
-body{
-	/*height: 100%;
-	background-image: url(../resources/imagens/wallpaper3.jpg);
-	background-size: 100% 100%;*/
-	
+body{	
 	background-image: linear-gradient(#002451, #000820);
 	background-repeat: no-repeat;
 }

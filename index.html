@@ -16,14 +16,15 @@
 		});
 		
 		win.on('loaded',function(){
+			configurar();
+			
 			montarApps();
 			
-			var navegacao = new Navegacao($('#app-1'));
+			var navegacao = new Navegacao(document, $('#app-1'));
 			navegacao
 				.adicionarNavegacao(".menu")
-				.adicionarNavegacao(".app");
-			
-			$(document).keydown(navegacao.navegar);
+				.adicionarNavegacao(".app")
+				.navegar();
 
 			$(".app").mouseenter(playSound);
 
@@ -55,7 +56,7 @@
 			win.close();
 			gui.Window.open('configuracoes.html', {
 				  fullscreen: true,
-				  toolbar: false
+				  toolbar: true
 			});
 		}
 		
@@ -69,6 +70,12 @@
 			Mustache.parse(template);
 			var rendered = Mustache.render(template, view);
 			$("#target").html(rendered);
+		}
+		
+		function configurar(){
+			var config = JSON.parse(fs.readFileSync('config/config.json', 'utf8'));
+			$("body").css("background-image","url(file:///" + config.background + ")");
+			$("body").css("background-size","100% 100%");
 		}
 	</script>
 	

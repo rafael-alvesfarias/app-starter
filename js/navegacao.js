@@ -1,6 +1,6 @@
 var selecionado;
 
-Navegacao = function(primeiroElemento, funcaoVoltar){
+Navegacao = function(target, primeiroElemento){
 	
 	this.verticalIndex = 0;
 	
@@ -20,9 +20,17 @@ Navegacao = function(primeiroElemento, funcaoVoltar){
 			}
 		}
 		return this;
-	};	
+	};
 	
-	this.navegar = function(event){
+	this.keyUp = function(event){
+		switch(event.keyCode){
+			case 8:
+				$(target).trigger("voltar");
+			break;
+		}
+	}
+	
+	this.keyDown = function(event){
 		switch(event.keyCode){
 			case 37: 
 				if(selecionado){
@@ -77,12 +85,14 @@ Navegacao = function(primeiroElemento, funcaoVoltar){
 					selecionado.click();
 				}
 			break;
-			case 8:
-				if(funcaoVoltar){
-					funcaoVoltar();
-				}
-			break;
 		}
+	};
+	
+	this.navegar = function(){
+		$(target).unbind("keydown");
+		$(target).unbind("keyup");
+		$(target).keydown(this.keyDown);
+		$(target).keyup(this.keyUp);
 	};
 }
 
