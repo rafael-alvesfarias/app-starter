@@ -21,11 +21,10 @@
 			
 			montarApps();
 			
-			var navegacao = new Navegacao(document, $('#app-1'));
+			var navegacao = Navegacao(document, $('#app-1'));
 			navegacao
 				.adicionarNavegacao(".menu")
-				.adicionarNavegacao(".app")
-				.navegar();
+				.adicionarNavegacao(".app");
 
 			$(".app").mouseenter(playSound);
 

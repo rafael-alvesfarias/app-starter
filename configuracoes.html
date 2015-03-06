@@ -16,12 +16,10 @@
 		});
 		
 		$(document).ready(function(){
-			alert(navegacao);
-			var navegacao = new Navegacao(document, $('#menuApps'));
+			var navegacao = Navegacao(document, $('#menuApps'));
 			navegacao
 				.adicionarNavegacao(".menu")
-				.adicionarNavegacao(".menuConfig", true)
-				.navegar();
+				.adicionarNavegacao(".menuConfig", true);
 			
 			$(document).on("voltar", function(){
 				console.log("voltando...");
