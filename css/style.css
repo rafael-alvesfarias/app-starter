@@ -35,9 +35,10 @@ h2{
 }
 
 .apps{
-	width: 1024px;
+	width: 1044px;
 	margin: 0 auto;
-	padding-top: 150px
+	padding-top: 150px;
+	overflow: hidden;
 }
 
 .apps img{
@@ -60,6 +61,11 @@ h2{
 	width: 256px;
 	height: 256px;
 	margin: 0 auto;
+	visibility: hidden;
+}
+
+.visivel{
+	visibility: visible;
 }
 
 .app-selecionada{

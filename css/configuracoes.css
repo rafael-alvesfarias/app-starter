@@ -8,7 +8,8 @@
 	line-height: 1.5;
 }
 
-body{	
+body{
+	background-color: #000820;
 	background-image: linear-gradient(#002451, #000820);
 	background-repeat: no-repeat;
 }

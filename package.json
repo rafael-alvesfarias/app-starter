@@ -1,7 +1,7 @@
 {
 	"name":"app-starter",
 	"window":{
-		"toolbar":true,
+		"toolbar":false,
 		"fullscreen":true
 	},
 	"main":"index.html"

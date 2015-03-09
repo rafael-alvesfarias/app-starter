@@ -54,10 +54,10 @@ Navegacao = function(target, primeiroElemento){
 						indiceHorizontal = parseInt(this.selecionado.attr("horizontal-index"));
 						elementoAnterior = $("*[horizontal-index='" + (indiceHorizontal - 1) + "'][vertical-index='" + indiceVertical + "']");
 						if(elementoAnterior.length){
-							this.selecionar(elementoAnterior);
+							this.selecionar(elementoAnterior, "esquerda");
 						}
 					}else{
-						this.selecionar(primeiroElemento);
+						this.selecionar(primeiroElemento, "esquerda");
 					}
 				break;
 				case 38:
@@ -66,10 +66,10 @@ Navegacao = function(target, primeiroElemento){
 						indiceHorizontal = parseInt(this.selecionado.attr("horizontal-index"));
 						elementoSuperior = $("*[vertical-index='" + (indiceVertical - 1) + "'][horizontal-index='0']");
 						if(elementoSuperior.length){
-							this.selecionar(elementoSuperior);
+							this.selecionar(elementoSuperior, "cima");
 						}
 					}else{
-						this.selecionar(primeiroElemento);
+						this.selecionar(primeiroElemento, "cima");
 					}
 				break;
 				case 39:
@@ -78,10 +78,10 @@ Navegacao = function(target, primeiroElemento){
 						indiceHorizontal = parseInt(this.selecionado.attr("horizontal-index"));
 						proxElemento = $("*[horizontal-index='" + (indiceHorizontal + 1) + "'][vertical-index='" + indiceVertical + "']");
 						if(proxElemento.length){
-							this.selecionar(proxElemento);
+							this.selecionar(proxElemento, "direita");
 						}
 					}else{
-						this.selecionar(primeiroElemento);
+						this.selecionar(primeiroElemento, "direita");
 					}
 				break;
 				case 40:
@@ -90,10 +90,10 @@ Navegacao = function(target, primeiroElemento){
 						indiceHorizontal = parseInt(this.selecionado.attr("horizontal-index"));
 						elementoInferior = $("*[vertical-index='" + (indiceVertical + 1) + "'][horizontal-index='0']");
 						if(elementoInferior.length){
-							this.selecionar(elementoInferior);
+							this.selecionar(elementoInferior, "baixo");
 						}
 					}else{
-						this.selecionar(primeiroElemento);
+						this.selecionar(primeiroElemento, "baixo");
 					}
 				break;
 				case 13:
@@ -111,11 +111,12 @@ Navegacao = function(target, primeiroElemento){
 		 * O evento ganhouSelecao é lançado quando um elemento ganha a seleção.
 		 * @param elemento - elemento que será selecionado
 		 */
-		selecionar: function(elemento){
+		selecionar: function(elemento, tecla){
 			if(this.selecionado){
 				this.selecionado.trigger("perdeuSelecao");
+				
 			}
-			elemento.trigger("ganhouSelecao");
+			elemento.trigger("ganhouSelecao", tecla);
 			this.selecionado = elemento;
 		} 
 	};
