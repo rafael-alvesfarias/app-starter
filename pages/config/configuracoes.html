@@ -1,0 +1,114 @@
+<html>
+<head>
+	<link rel="stylesheet" type="text/css" href="../../css/cabecalho.css">
+	<link rel="stylesheet" type="text/css" href="../../css/configuracoes.css">
+	<script type="text/javascript" src="../../js/jquery-1.11.2.js"></script>
+	<script type="text/javascript" src="../../js/navegacao.js"></script>
+	<script type="text/javascript" src="configuracoes.js"></script>
+	<script type="text/javascript" src="../../app/data/dao/aplicativosDAO.js"></script>
+	<script type="text/javascript" src="../../app/data/dao/configuracoesDAO.js"></script>
+	<script>
+		var configuracoes = Configuracoes();
+		var tela = configuracoes.tela;
+		var appManager = configuracoes.appManager;
+		var configManager = configuracoes.configManager;
+		$(document).ready(function(){
+			tela.init();
+		});
+	</script>
+</head>
+<body>
+	<div class="menu-superior">
+		<div class="menu botao-fechar" id="menu-2" onclick="configuracoes.tela.fechar();"></div>
+	</div>
+	<div style="clear:both;"></div>
+	<div class="titulo">
+		<h1>Configura��es</h1>
+	</div>
+	<div class="configuracoes">
+		<div class="menu-lateral">
+			<ul>
+				<li id="menuApps" class="menuConfig" id-aba="aplicativos" onclick="tela.aplicativos.montar();tela.mostrarAba(this);"><a href="#">Aplicativos</a></li>
+				<li id="menuAparencia" class="menuConfig" id-aba="aparencia" onclick="tela.mostrarAba(this);"><a href="#">Apar�ncia</a>
+			</ul>
+		</div>
+		<div class="configurar">
+			<script type="x-tmpl-mustache" id="tmplApps">
+				<h2>Aplicativos</h2>
+				<table>
+					<thead>
+						<tr>
+							<th>Nome</th>
+							<th>Local</th>
+							<th>Imagem</th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						{{#apps}}
+							<tr>
+								<td>{{nome}}</td>
+								<td>{{local}}</td>
+								<td><img class="img-app" src="{{imagem}}"></td>
+								<td><a href="#" onclick="appManager.excluir({{index}})"><img class="img-excluir" src="../../resources/imagens/excluir.png"></a></td>
+							</tr>
+						{{/apps}}
+					</tbody>
+				</table>
+				<div class="botoes">
+					<input type="button" onclick="appManager.nova()" value="Novo">
+				</div>
+			</script>
+			<div class="aba" id="aplicativos" style="display:none"></div>
+			<div class="aba" id="novaApp" style="display:none">
+				<h2>Novo Aplicativo</h2>
+				<form id="frmNovaApp">
+					<table>
+						<tbody>
+							<tr>
+								<td>Nome:</td><td><input type="text" id="nome" name="nome" style="width:300px;"/></td>
+							</tr>
+							<tr>
+								<td>Local:</td>
+								<td style="display:inline;width:520px;" >
+									<input type="file" style="display:none;" id="local" name="local" onchange="tela.novoAplicativo.carregarLocal(this);" accept=".lnk">
+									<input type="text" id="txtLocal" disabled="disabled" style="width:500px;">
+								</td>
+								<td><a href="#" onclick="$('#local').click();"><img class="img-app" src="../../resources/imagens/upload.png"></a></td>
+							</tr>
+							<tr>
+								<td>Imagem:</td>
+								<td>
+									<input type="file" style="display:none;" id="imagem" name="imagem" onchange="tela.novoAplicativo.carregarImagem(this)" accept=".png"/>
+									<a href="#" onclick="$('#imagem').click();"><img class="img-app" id="previewImg" src="../../resources/imagens/upload.png"></a>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</form>
+				<div class="botoes">
+					<input type="button" onclick="appManager.salvar()" value="Salvar">
+				</div>
+			</div>
+			<div class="aba" id="aparencia" style="display:none;">
+				<h2>Apar�ncia</h2>
+				<form>
+					<table>
+						<tr>
+							<td>Papel de parede:</td>
+							<td style="display:inline;width:520px;" >
+								<input type="file" style="display:none;" id="background" name="background" onchange="tela.aparencia.carregarBackground(this);">
+								<input type="text" id="txtBackground" disabled="disabled" style="width:500px;">
+							</td>
+							<td><a href="#" onclick="$('#background').click();"><img class="img-app" src="../../resources/imagens/upload.png"></a></td>
+						</tr>
+					</table>
+				</form>
+				<div class="botoes">
+					<input type="button" onclick="configManager.salvar()" value="Salvar">
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

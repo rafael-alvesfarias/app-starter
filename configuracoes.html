@@ -22,7 +22,6 @@
 				.adicionarNavegacao(".menuConfig", true);
 			
 			$(document).on("voltar", function(){
-				console.log("voltando...");
 				if(!$("input:focus").length){
 					win.close();
 					gui.Window.open('index.html', {
@@ -97,7 +96,7 @@
 				}
 			});
 			
-			escreverArquivo(novasApps, "config/apps.json", function(err){
+			fs.writeFile("config/apps.json", JSON.stringify(novasApps), function(err){
 				if(err) {
 			        console.log(err);
 			    } else {
@@ -118,7 +117,7 @@
 			json.apps[json.apps.length] = app;
 			console.log(json);
 			
-			escreverArquivo(json, "config/apps.json", function(err){
+			fs.writeFile("config/apps.json", JSON.stringify(json), function(err){
 				if(err) { 
 			        console.log(err);
 			    } else {
@@ -134,7 +133,7 @@
 			var config = new Object();
 			json.background = replaceAll(replaceAll(form.background.value, "\\", "/")," ","%20");
 			
-			escreverArquivo(json, "config/config.json", function(err){
+			fs.writeFile("config/config.json", JSON.stringify(json), function(err){
 				if(err) {
 			        console.log(err);
 			    } else {
@@ -143,13 +142,6 @@
 			    }
 			});
 		}
-		
-		function escreverArquivo(json, arquivo, callback){
-			var fileName = arquivo;
-			
-			fs.writeFile(fileName, JSON.stringify(json), callback);
-		}
-		
 		
 		function carregarLink(chooser){
 			$("#txtLocal").val($(chooser).val());
@@ -180,13 +172,13 @@
 	</div>
 	<div style="clear:both;"></div>
 	<div class="titulo">
-		<h1>Configurações</h1>
+		<h1>Configuraï¿½ï¿½es</h1>
 	</div>
 	<div class="configuracoes">
 		<div class="menu-lateral">
 			<ul>
 				<li id="menuApps" class="menuConfig" id-aba="aplicativos" onclick="montarTabela();mostrarAba(this);"><a href="#">Aplicativos</a></li>
-				<li id="menuAparencia" class="menuConfig" id-aba="aparencia" onclick="mostrarAba(this);"><a href="#">Aparência</a>
+				<li id="menuAparencia" class="menuConfig" id-aba="aparencia" onclick="mostrarAba(this);"><a href="#">Aparï¿½ncia</a>
 			</ul>
 		</div>
 		<div class="configurar">
@@ -248,7 +240,7 @@
 				</div>
 			</div>
 			<div class="aba" id="aparencia" style="display:none;">
-				<h2>Aparência</h2>
+				<h2>Aparï¿½ncia</h2>
 				<form>
 					<table>
 						<tr>

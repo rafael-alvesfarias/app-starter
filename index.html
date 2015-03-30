@@ -4,12 +4,14 @@
 	<link rel="stylesheet" type="text/css" href="css/style.css">
 	<script type="text/javascript" src="js/jquery-1.11.2.js"></script>
 	<script type="text/javascript" src="js/navegacao.js"></script>
+	<script type="text/javascript" src="app/data/dao/configuracoesDAO.js"></script>
 	<script>
 		var executor = require('executorComandos.js');
 		var gui = require('nw.gui');
 		var win = gui.Window.get();
 		var Mustache = require("mustache");
 		var fs = require("fs");
+		var configuracoesDAO = ConfiguracoesDAO();
 		
 		win.on('close', function() {
   			this.hide();
@@ -21,7 +23,10 @@
 			
 			montarApps();
 			
-			var navegacao = Navegacao(document, $('#app-1'));
+			var navegacao = Navegacao(document, {
+				primeiroElemento : $('#app-1')
+			});
+			
 			navegacao
 				.adicionarNavegacao(".menu")
 				.adicionarNavegacao(".app");
@@ -34,13 +39,17 @@
 				playSound();
 				if(!$(this).hasClass("visivel")){
 					if(tecla == "direita"){
-						$( "table" ).animate({ "left": "-=256px" }, "slow" );
-						$("#app-" + (parseInt($(this).attr("id").split("-")[1]) - 4)).removeClass("visivel");
 						$(this).addClass("visivel");
+						var id = "#app-" + (parseInt($(this).attr("id").split("-")[1]) - 4);
+						$( "table" ).animate({ "left": "-=256px" }, 1000, function(){
+							$(id).removeClass("visivel");
+						});
 					}else if(tecla == "esquerda"){
-						$( "table" ).animate({ "left": "+=256px" }, "slow" );
 						$(this).addClass("visivel");
-						$("#app-" + (parseInt($(this).attr("id").split("-")[1]) + 4)).removeClass("visivel");
+						var id =  "#app-" + (parseInt($(this).attr("id").split("-")[1]) + 4);
+						$( "table" ).animate({ "left": "+=256px" }, 1000, function(){
+							$(id).removeClass("visivel");
+						});
 					}
 				}
 			});
@@ -65,9 +74,9 @@
 
 		function config(){
 			win.close();
-			gui.Window.open('configuracoes.html', {
-				  fullscreen: true,
-				  toolbar: false
+			gui.Window.open('app/view/configuracoes/configuracoes.html', {
+				  fullscreen: false,
+				  toolbar: true
 			});
 		}
 		
@@ -94,7 +103,7 @@
 		}
 		
 		function configurar(){
-			var config = JSON.parse(fs.readFileSync('config/config.json', 'utf8'));
+			var config = configuracoesDAO.obter();
 			$("body").css("background-image","url(file:///" + config.background + ")");
 			$("body").css("background-size","100% 100%");
 		}
@@ -124,7 +133,6 @@
 	</script>
 </head>
 <body>
-	<audio src="resources/sons/cursor.ogg" id="som_cursor"></audio>
 	<div class="menu-superior">
 			<div class="menu botao-config" id="menu-1" onclick="config();"></div>
 			<div class="menu botao-fechar" id="menu-2" onclick="fechar();"></div>

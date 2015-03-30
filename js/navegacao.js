@@ -5,15 +5,32 @@
  * Para adicionar funcionalidade quando um elemento navegável é selecionado, será necessário
  * escutar os eventos ganhouSelecao e perdeuSelecao.
  * @param target - o alvo para vinculação com os elementos de teclado.
- * @param primeiroElemento - o primeiro elemento que será selecionado ao navegar pela primeira vez.
  * @returns navegacao
  */
-Navegacao = function(target, primeiroElemento){
+Navegacao = function(target, cfg){
+	
+	var config = {
+		audioSource: "resources/sons/cursor.ogg",
+		primeiroElemento: false
+	};
+	
+	if(cfg){
+		if(cfg.primeiroElemento){
+			config.primeiroElemento = cfg.primeiroElemento;
+		}
+		
+		if(cfg.audioSource){
+			config.audioSource = cfg.audioSource;
+		}
+	}
+	
 	var objeto = {
 		
 		selecionado: false,
 		
 		verticalIndex: 0,
+		
+		primeiroElemento: config.primeiroElemento,
 		
 		/**
 		 * Função que adiciona a funcionalidade de navegação para o seletor informado.
@@ -22,17 +39,22 @@ Navegacao = function(target, primeiroElemento){
 		 */
 		adicionarNavegacao: function(seletor, isVertical){
 			var elementos = $(seletor);
-			if(!isVertical){
-				for(index = 0; index < elementos.length;  index++){
-					$(elementos[index]).attr("horizontal-index", index);
-					$(elementos[index]).attr("vertical-index", this.verticalIndex);
+			if(elementos.length > 0){
+				if(this.primeiroElemento == false){
+					this.primeiroElemento = $(elementos[0]);
 				}
-			this.verticalIndex++;
-			}else{
-				for(index = 0; index < elementos.length;  index++){
-					$(elementos[index]).attr("horizontal-index", 0);
-					$(elementos[index]).attr("vertical-index", this.verticalIndex);
+				if(!isVertical){
+					for(index = 0; index < elementos.length;  index++){
+						$(elementos[index]).attr("horizontal-index", index);
+						$(elementos[index]).attr("vertical-index", this.verticalIndex);
+					}
 					this.verticalIndex++;
+				}else{
+					for(index = 0; index < elementos.length;  index++){
+						$(elementos[index]).attr("horizontal-index", 0);
+						$(elementos[index]).attr("vertical-index", this.verticalIndex);
+						this.verticalIndex++;
+					}
 				}
 			}
 			return this;
@@ -57,7 +79,7 @@ Navegacao = function(target, primeiroElemento){
 							this.selecionar(elementoAnterior, "esquerda");
 						}
 					}else{
-						this.selecionar(primeiroElemento, "esquerda");
+						this.selecionar(this.primeiroElemento, "esquerda");
 					}
 				break;
 				case 38:
@@ -69,7 +91,7 @@ Navegacao = function(target, primeiroElemento){
 							this.selecionar(elementoSuperior, "cima");
 						}
 					}else{
-						this.selecionar(primeiroElemento, "cima");
+						this.selecionar(this.primeiroElemento, "cima");
 					}
 				break;
 				case 39:
@@ -81,7 +103,7 @@ Navegacao = function(target, primeiroElemento){
 							this.selecionar(proxElemento, "direita");
 						}
 					}else{
-						this.selecionar(primeiroElemento, "direita");
+						this.selecionar(this.primeiroElemento, "direita");
 					}
 				break;
 				case 40:
@@ -93,7 +115,7 @@ Navegacao = function(target, primeiroElemento){
 							this.selecionar(elementoInferior, "baixo");
 						}
 					}else{
-						this.selecionar(primeiroElemento, "baixo");
+						this.selecionar(this.primeiroElemento, "baixo");
 					}
 				break;
 				case 13:
@@ -105,7 +127,7 @@ Navegacao = function(target, primeiroElemento){
 		},
 	
 		/**
-		 * Função privada responsável por selecionar os elementos e
+		 * Função responsável por selecionar os elementos e
 		 * lançar os eventos pertinentes.
 		 * O evento perdeuSelecao é lançado quando um elemento perde a seleção.
 		 * O evento ganhouSelecao é lançado quando um elemento ganha a seleção.
@@ -114,12 +136,18 @@ Navegacao = function(target, primeiroElemento){
 		selecionar: function(elemento, tecla){
 			if(this.selecionado){
 				this.selecionado.trigger("perdeuSelecao");
-				
 			}
 			elemento.trigger("ganhouSelecao", tecla);
 			this.selecionado = elemento;
-		} 
+			this.playSound();
+		},
+		
+		playSound: function(){
+			target.getElementById("som_cursor").play();
+		}
 	};
+	
+	$("body").append("<audio src='" + config.audioSource + "' id='som_cursor'></audio>");
 	
 	$(target).keydown(function(event){
 		objeto.keyDown.call(objeto, event);
