@@ -3,22 +3,112 @@
 	<link rel="stylesheet" type="text/css" href="../../../css/cabecalho.css">
 	<link rel="stylesheet" type="text/css" href="../../../css/configuracoes.css">
 	<script type="text/javascript" src="../../../js/jquery-1.11.2.js"></script>
-	<script type="text/javascript" src="../../../js/navegacao.js"></script>
+	<script type="text/javascript" src="../components/navegacao.js"></script>
 	<script type="text/javascript" src="../../controller/configuracoesController.js"></script>
 	<script type="text/javascript" src="../../../app/data/dao/aplicativosDAO.js"></script>
 	<script type="text/javascript" src="../../../app/data/dao/configuracoesDAO.js"></script>
-	<script type="text/javascript" src="configuracoesViewHelper.js"></script>
-	<script>
+	<script type="text/javascript">
 		var controller = ConfiguracoesController();
-		var viewHelper = ConfiguracoesViewHelper();
+		var gui = require('nw.gui');
+		var win = gui.Window.get();
+		var Mustache = require("mustache");
+		
+		function adicionarNavegacao(){
+			var navegacao = Navegacao(document);
+			navegacao
+				.adicionarNavegacao(".menu")
+				.adicionarNavegacao(".menuConfig", true);
+		}
+		
+		function configurarEventos(){
+			win.on('close', function() {
+				this.hide();
+				this.close(true);
+			});
+			$(document).on("voltar", voltar);
+			$(".menuConfig").on("ganhouSelecao", function(e){
+				$(this).addClass("menuConfigSelecionado");
+				$(this).click();
+			});
+			$(".menuConfig").on("perdeuSelecao", function(e){
+				$(this).removeClass("menuConfigSelecionado");
+			});
+			$(".menu").on("ganhouSelecao", function(e){
+				$(this).attr("class", $(this).attr("class") + "-selecionado");
+			});
+			$(".menu").on("perdeuSelecao", function(e){
+				$(this).attr("class", $(this).attr("class").replace("-selecionado",""));
+			});
+			$("#btnSalvarApp").click(function(){
+				controller.salvarApp(function(){
+					montar();
+					mostrarAba($("#menuApps"));
+				});
+			});
+			$("#btnSalvarCfg").click(function(){
+				controller.salvarConfiguracoes(function(){
+					montar();
+					mostrarAba($("#menuApps"));
+				});
+			});
+		}
+		
+		function excluirApp(indice){
+			controller.excluirApp(indice, function(){
+				montar();
+				mostrarAba($("#menuApps"));
+			});
+		}
+		
+		function mostrarAba(elemento){
+			$(".aba").hide();
+			$("#"+$(elemento).attr("id-aba")).fadeIn("slow");
+		}
+		
+		function montar(){
+			var dao = AplicativosDAO();
+			var template = $("#tmplApps").html();
+			var view = dao.listar();
+			Mustache.parse(template);
+			var rendered = Mustache.render(template, view);
+			$("#aplicativos").html(rendered);
+		}
+		
+		function carregarLocal(chooser){
+			$("#txtLocal").val($(chooser).val());
+		}
+		
+		function carregarImagem(chooser){
+			$("#previewImg").attr("src", $(chooser).val());
+		}
+		
+		function carregarBackground(chooser){
+			$("#txtBackground").val($(chooser).val());
+		}
+		
+		function fechar(){
+			win.close();
+		}
+		
+		function voltar(){
+			if(!$("input:focus").length){
+				win.close();
+				gui.Window.open('../aplicativos/aplicativos.html', {
+					  fullscreen: false,
+					  toolbar: true
+				});
+			}
+		}
+		
 		$(document).ready(function(){
-			viewHelper.init();
+			adicionarNavegacao();
+			configurarEventos();
 		});
 	</script>
 </head>
 <body>
 	<div class="menu-superior">
-		<div class="menu botao-fechar" id="menu-2" onclick="viewHelper.fechar();"></div>
+		<div class="menu botao-fechar" id="menu-2" onclick="fechar();"></div>
 	</div>
 	<div style="clear:both;"></div>
 	<div class="titulo">
@@ -27,8 +117,8 @@
 	<div class="configuracoes">
 		<div class="menu-lateral">
 			<ul>
-				<li id="menuApps" class="menuConfig" id-aba="aplicativos" onclick="viewHelper.aplicativos.montar();viewHelper.mostrarAba(this);"><a href="#">Aplicativos</a></li>
-				<li id="menuAparencia" class="menuConfig" id-aba="aparencia" onclick="viewHelper.mostrarAba(this);"><a href="#">Apar�ncia</a>
+				<li id="menuApps" class="menuConfig" id-aba="aplicativos" onclick="montar();mostrarAba(this);"><a href="#">Aplicativos</a></li>
+				<li id="menuAparencia" class="menuConfig" id-aba="aparencia" onclick="mostrarAba(this);"><a href="#">Apar�ncia</a>
 			</ul>
 		</div>
 		<div class="configurar">
@@ -49,7 +139,7 @@
 								<td>{{nome}}</td>
 								<td>{{local}}</td>
 								<td><img class="img-app" src="{{imagem}}"></td>
-								<td><a href="#" class="excluirApp" indice="{{index}}"><img class="img-excluir" src="../../resources/imagens/excluir.png"></a></td>
+								<td><a href="#" onclick="excluirApp({{index}})"><img class="img-excluir" src="../../../resources/imagens/excluir.png"></a></td>
 							</tr>
 						{{/apps}}
 					</tbody>
@@ -70,16 +160,16 @@
 							<tr>
 								<td>Local:</td>
 								<td style="display:inline;width:520px;" >
-									<input type="file" style="display:none;" id="local" name="local" onchange="viewHelper.novoAplicativo.carregarLocal(this);" accept=".lnk">
+									<input type="file" style="display:none;" id="local" name="local" onchange="carregarLocal(this);" accept=".lnk">
 									<input type="text" id="txtLocal" disabled="disabled" style="width:500px;">
 								</td>
-								<td><a href="#" onclick="$('#local').click();"><img class="img-app" src="../../resources/imagens/upload.png"></a></td>
+								<td><a href="#" onclick="$('#local').click();"><img class="img-app" src="../../../resources/imagens/upload.png"></a></td>
 							</tr>
 							<tr>
 								<td>Imagem:</td>
 								<td>
-									<input type="file" style="display:none;" id="imagem" name="imagem" onchange="viewHelper.novoAplicativo.carregarImagem(this)" accept=".png"/>
-									<a href="#" onclick="$('#imagem').click();"><img class="img-app" id="previewImg" src="../../resources/imagens/upload.png"></a>
+									<input type="file" style="display:none;" id="imagem" name="imagem" onchange="carregarImagem(this)" accept=".png"/>
+									<a href="#" onclick="$('#imagem').click();"><img class="img-app" id="previewImg" src="../../../resources/imagens/upload.png"></a>
 								</td>
 							</tr>
 						</tbody>
@@ -96,10 +186,10 @@
 						<tr>
 							<td>Papel de parede:</td>
 							<td style="display:inline;width:520px;" >
-								<input type="file" style="display:none;" id="background" name="background" onchange="viewHelper.aparencia.carregarBackground(this);">
+								<input type="file" style="display:none;" id="background" name="background" onchange="carregarBackground(this);">
 								<input type="text" id="txtBackground" disabled="disabled" style="width:500px;">
 							</td>
-							<td><a href="#" onclick="$('#background').click();"><img class="img-app" src="../../resources/imagens/upload.png"></a></td>
+							<td><a href="#" onclick="$('#background').click();"><img class="img-app" src="../../../resources/imagens/upload.png"></a></td>
 						</tr>
 					</table>
 				</form>

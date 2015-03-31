@@ -4,5 +4,5 @@
 		"toolbar":true,
 		"fullscreen":false
 	},
-	"main":"index.html"
+	"main":"app/view/aplicativos/aplicativos.html"
 }

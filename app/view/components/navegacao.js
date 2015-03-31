@@ -1,16 +1,15 @@
 /**
- * @author Rafael Alves Farias
- * Função responsável por contruir um objeto de navegação para determinado alvo informado.
+ * Função responsável por construir um objeto de navegação para determinado alvo informado.
  * Permite que determinados seletores sejam navegáveis via teclado.
  * Para adicionar funcionalidade quando um elemento navegável é selecionado, será necessário
  * escutar os eventos ganhouSelecao e perdeuSelecao.
+ * @author Rafael Alves Farias
  * @param target - o alvo para vinculação com os elementos de teclado.
  * @returns navegacao
  */
 Navegacao = function(target, cfg){
-	
 	var config = {
-		audioSource: "resources/sons/cursor.ogg",
+		audioSource: "../../../resources/sons/cursor.ogg",
 		primeiroElemento: false
 	};
 	
@@ -44,13 +43,13 @@ Navegacao = function(target, cfg){
 					this.primeiroElemento = $(elementos[0]);
 				}
 				if(!isVertical){
-					for(index = 0; index < elementos.length;  index++){
+					for(var index = 0; index < elementos.length;  index++){
 						$(elementos[index]).attr("horizontal-index", index);
 						$(elementos[index]).attr("vertical-index", this.verticalIndex);
 					}
 					this.verticalIndex++;
 				}else{
-					for(index = 0; index < elementos.length;  index++){
+					for(var index = 0; index < elementos.length;  index++){
 						$(elementos[index]).attr("horizontal-index", 0);
 						$(elementos[index]).attr("vertical-index", this.verticalIndex);
 						this.verticalIndex++;
@@ -72,9 +71,9 @@ Navegacao = function(target, cfg){
 			switch(event.keyCode){
 				case 37: 
 					if(this.selecionado){
-						indiceVertical = parseInt(this.selecionado.attr("vertical-index"));
-						indiceHorizontal = parseInt(this.selecionado.attr("horizontal-index"));
-						elementoAnterior = $("*[horizontal-index='" + (indiceHorizontal - 1) + "'][vertical-index='" + indiceVertical + "']");
+						var indiceVertical = parseInt(this.selecionado.attr("vertical-index"));
+						var indiceHorizontal = parseInt(this.selecionado.attr("horizontal-index"));
+						var elementoAnterior = $("*[horizontal-index='" + (indiceHorizontal - 1) + "'][vertical-index='" + indiceVertical + "']");
 						if(elementoAnterior.length){
 							this.selecionar(elementoAnterior, "esquerda");
 						}
@@ -84,9 +83,9 @@ Navegacao = function(target, cfg){
 				break;
 				case 38:
 					if(this.selecionado){
-						indiceVertical = parseInt(this.selecionado.attr("vertical-index"));
-						indiceHorizontal = parseInt(this.selecionado.attr("horizontal-index"));
-						elementoSuperior = $("*[vertical-index='" + (indiceVertical - 1) + "'][horizontal-index='0']");
+						var indiceVertical = parseInt(this.selecionado.attr("vertical-index"));
+						var indiceHorizontal = parseInt(this.selecionado.attr("horizontal-index"));
+						var elementoSuperior = $("*[vertical-index='" + (indiceVertical - 1) + "'][horizontal-index='0']");
 						if(elementoSuperior.length){
 							this.selecionar(elementoSuperior, "cima");
 						}
@@ -96,9 +95,9 @@ Navegacao = function(target, cfg){
 				break;
 				case 39:
 					if(this.selecionado){
-						indiceVertical = parseInt(this.selecionado.attr("vertical-index"));
-						indiceHorizontal = parseInt(this.selecionado.attr("horizontal-index"));
-						proxElemento = $("*[horizontal-index='" + (indiceHorizontal + 1) + "'][vertical-index='" + indiceVertical + "']");
+						var indiceVertical = parseInt(this.selecionado.attr("vertical-index"));
+						var indiceHorizontal = parseInt(this.selecionado.attr("horizontal-index"));
+						var proxElemento = $("*[horizontal-index='" + (indiceHorizontal + 1) + "'][vertical-index='" + indiceVertical + "']");
 						if(proxElemento.length){
 							this.selecionar(proxElemento, "direita");
 						}
@@ -108,9 +107,9 @@ Navegacao = function(target, cfg){
 				break;
 				case 40:
 					if(this.selecionado){
-						indiceVertical = parseInt(this.selecionado.attr("vertical-index"));
-						indiceHorizontal = parseInt(this.selecionado.attr("horizontal-index"));
-						elementoInferior = $("*[vertical-index='" + (indiceVertical + 1) + "'][horizontal-index='0']");
+						var indiceVertical = parseInt(this.selecionado.attr("vertical-index"));
+						var indiceHorizontal = parseInt(this.selecionado.attr("horizontal-index"));
+						var elementoInferior = $("*[vertical-index='" + (indiceVertical + 1) + "'][horizontal-index='0']");
 						if(elementoInferior.length){
 							this.selecionar(elementoInferior, "baixo");
 						}

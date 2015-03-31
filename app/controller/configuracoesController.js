@@ -1,7 +1,7 @@
-function Configuracoes(){	
+function ConfiguracoesController(){	
 	var controller = {
 		novaApp: function(){
-			$(".aba").css("display","none");
+			$(".aba").hide();
 			$("#novaApp").fadeIn();
 		},
 		
