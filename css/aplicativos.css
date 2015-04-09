@@ -41,6 +41,25 @@ h2{
 	overflow: hidden;
 }
 
+
+@font-face{
+	font-family: "Digital SF Italic";
+	src: url("../resources/fonts/DigitalSFItalic.ttf");
+}
+
+#relogio{
+	font-family: "Digital SF Italic";
+	font-size: 32px;
+	font-weight: 500;
+	color: #C1CEFF;
+	opacity: 0.8;
+	position: absolute;
+	bottom: 5px;
+	right: 10px;
+	width: 70px;
+	padding: 5px;
+}
+
 .apps img{
 	padding: 10px;
 	height: 236px;

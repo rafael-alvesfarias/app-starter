@@ -1,4 +1,4 @@
-function ConfiguracoesController(){	
+function ConfiguracoesController(){
 	var controller = {
 		novaApp: function(){
 			$(".aba").hide();

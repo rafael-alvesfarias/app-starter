@@ -13,11 +13,26 @@
 		var Mustache = require("mustache");
 		var controller = AplicativosController();
 		
+		var relogio = function(elemento){
+			var momento = new Date();
+			var hora = momento.getHours();
+			hora = hora < 9 ? "0" + hora : hora;
+			var min = momento.getMinutes();
+			min = min < 9 ? "0" + min : min;
+			var seg = momento.getSeconds();
+			
+			elemento.html(hora + ":" + min);
+			setTimeout(function(){
+				relogio(elemento);
+			}, 1000);
+		}
+		
 		$(document).ready(function(){
 			configurarPagina();
 			montarApps();
 			configurarNavegacao();
 			configurarEventos();
+			relogio($("#relogio"));
 		});
 		
 		function configurarNavegacao(){
@@ -132,5 +147,8 @@
 	</div>
 	<div style="clear:both;"></div>
 	<div class="apps" id="target"></div>
+	<div class="rodape">
+		<div id="relogio"></div>
+	</div>
 </body>
 </html>
