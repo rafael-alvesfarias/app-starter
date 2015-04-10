@@ -4,6 +4,7 @@
 	<link rel="stylesheet" type="text/css" href="../../../css/aplicativos.css">
 	<script type="text/javascript" src="../../../js/jquery-1.11.2.js"></script>
 	<script type="text/javascript" src="../components/navegacao.js"></script>
+	<script type="text/javascript" src="../components/relogio.js"></script>
 	<script type="text/javascript" src="../../data/dao/configuracoesDAO.js"></script>
 	<script type="text/javascript" src="../../data/dao/aplicativosDAO.js"></script>
 	<script type="text/javascript" src="../../controller/aplicativosController.js"></script>
@@ -13,26 +14,12 @@
 		var Mustache = require("mustache");
 		var controller = AplicativosController();
 		
-		var relogio = function(elemento){
-			var momento = new Date();
-			var hora = momento.getHours();
-			hora = hora < 9 ? "0" + hora : hora;
-			var min = momento.getMinutes();
-			min = min < 9 ? "0" + min : min;
-			var seg = momento.getSeconds();
-			
-			elemento.html(hora + ":" + min);
-			setTimeout(function(){
-				relogio(elemento);
-			}, 1000);
-		}
-		
 		$(document).ready(function(){
 			configurarPagina();
 			montarApps();
 			configurarNavegacao();
 			configurarEventos();
-			relogio($("#relogio"));
+			relogio($("#dataHora"));
 		});
 		
 		function configurarNavegacao(){
@@ -148,7 +135,9 @@
 	<div style="clear:both;"></div>
 	<div class="apps" id="target"></div>
 	<div class="rodape">
-		<div id="relogio"></div>
+		<div id="dataHora">
+
+		</div>
 	</div>
 </body>
 </html>
