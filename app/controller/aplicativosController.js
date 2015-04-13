@@ -12,7 +12,7 @@ function AplicativosController(){
 		},
 		
 		executarAplicativo: function(local){
-			executor(local).executar();
+			executor(local).abrir();
 		}
 	};
 }

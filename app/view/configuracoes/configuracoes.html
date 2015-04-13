@@ -1,5 +1,6 @@
 <html>
 <head>
+	<meta charset="UTF-8">
 	<link rel="stylesheet" type="text/css" href="../../../css/cabecalho.css">
 	<link rel="stylesheet" type="text/css" href="../../../css/configuracoes.css">
 	<script type="text/javascript" src="../../../js/jquery-1.11.2.js"></script>
@@ -94,8 +95,8 @@
 			if(!$("input:focus").length){
 				win.close();
 				gui.Window.open('../aplicativos/aplicativos.html', {
-					  fullscreen: false,
-					  toolbar: true
+					  fullscreen: true,
+					  toolbar: false
 				});
 			}
 		}
@@ -112,13 +113,13 @@
 	</div>
 	<div style="clear:both;"></div>
 	<div class="titulo">
-		<h1>Configura��es</h1>
+		<h1>Configurações</h1>
 	</div>
 	<div class="configuracoes">
 		<div class="menu-lateral">
 			<ul>
 				<li id="menuApps" class="menuConfig" id-aba="aplicativos" onclick="montar();mostrarAba(this);"><a href="#">Aplicativos</a></li>
-				<li id="menuAparencia" class="menuConfig" id-aba="aparencia" onclick="mostrarAba(this);"><a href="#">Apar�ncia</a>
+				<li id="menuAparencia" class="menuConfig" id-aba="aparencia" onclick="mostrarAba(this);"><a href="#">Aparência</a>
 			</ul>
 		</div>
 		<div class="configurar">
@@ -180,7 +181,7 @@
 				</div>
 			</div>
 			<div class="aba" id="aparencia" style="display:none;">
-				<h2>Apar�ncia</h2>
+				<h2>Aparência</h2>
 				<form>
 					<table>
 						<tr>

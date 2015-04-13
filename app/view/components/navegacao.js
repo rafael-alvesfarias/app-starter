@@ -59,6 +59,20 @@ Navegacao = function(target, cfg){
 			return this;
 		},
 		
+		/**
+		 * Remove todas as navegações.
+		 */
+		removerNavegacao: function(){
+			if(this.selecionado){
+				this.selecionado.trigger("perdeuSelecao");
+			}
+			this.selecionado = null;
+			$("*[horizontal-index]").each(function(){
+				$(this).removeAttr("horizontal-index");
+				$(this).removeAttr("vertical-index");
+			});
+		},
+		
 		keyUp: function(event){
 			switch(event.keyCode){
 				case 8:
@@ -148,10 +162,11 @@ Navegacao = function(target, cfg){
 	
 	$("body").append("<audio src='" + config.audioSource + "' id='som_cursor'></audio>");
 	
+	$(target).unbind("keydown");
+	$(target).unbind("keyup");
 	$(target).keydown(function(event){
 		objeto.keyDown.call(objeto, event);
 	});
-	
 	$(target).keyup(function(event){
 		objeto.keyUp.call(objeto, event);
 	});
