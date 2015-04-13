@@ -6,35 +6,28 @@
 	<script type="text/javascript" src="../../../js/jquery-1.11.2.js"></script>
 	<script type="text/javascript" src="../components/navegacao.js"></script>
 	<script type="text/javascript" src="../components/relogio.js"></script>
-	<script type="text/javascript" src="../../data/dao/configuracoesDAO.js"></script>
-	<script type="text/javascript" src="../../data/dao/aplicativosDAO.js"></script>
-	<script type="text/javascript" src="../../controller/aplicativosController.js"></script>
-	<script type="text/javascript" src="../../controller/menuController.js"></script>
 	<script type="text/javascript" src="../components/popup.js"></script>
+	<script type="text/javascript" src="../menu/menuSuperior.js"></script>
 	<script>
 		var gui = require('nw.gui');
 		var win = gui.Window.get();
 		var Mustache = require("mustache");
-		var controller = AplicativosController();
-		var menuController = MenuController();
-		var popupDesligar;
+		var appController = require("../../controller/aplicativosController");
 		var navegacao;
 		
 		$(document).ready(function(){
 			configurarPagina();
 			montarApps();
-			configurarNavegacao();
 			configurarEventos();
 			relogio($("#dataHora"));
-			popupDesligar = new Popup($("#popupDesligar"));
+			carregarMenu(configurarNavegacao);
 		});
 		
 		function configurarNavegacao(){
 			navegacao = Navegacao(document, {
 				primeiroElemento : $('#app-1')
 			});
-			navegacao
-				.adicionarNavegacao(".menu")
+			navegacao.adicionarNavegacao(".menu")
 				.adicionarNavegacao(".app");
 		}
 		
@@ -58,44 +51,26 @@
 					}
 				}
 			});
-			$(".menu").on("ganhouSelecao", function(e){
-				$(this).attr("class", $(this).attr("class") + "-selecionado");
-			});
+
 			$(".app").on("perdeuSelecao", function(e){
 				$(this).removeClass("selecionado");
 				$("#titulo-app-" + $(this).attr("id").split("-")[1]).css("visibility","hidden");
-			});
-			$(".menu").on("perdeuSelecao", function(e){
-				$(this).attr("class", $(this).attr("class").replace("-selecionado",""));
-			});
-			$(".botaoPopup").on("ganhouSelecao", function(e){
-				$(this).css("background-image","linear-gradient(to right, #FFF, #CCC)");
-			});
-			$(".botaoPopup").on("perdeuSelecao", function(e){
-				$(this).css("background-image","linear-gradient(#111, #000)");
 			});
 			win.on('close', function() {
 	  			this.hide();
 	  			this.close(true);
 			});
-			$(document).on("voltar", function(){
-				if($("#popupDesligar").css("display") == "block"){
-					navegacao.removerNavegacao();
-					popupDesligar.closeDialog();
-					configurarNavegacao();
-				}
-			});
 		};
 		
 		function configurarPagina(){
-			var config = controller.obterConfiguracoes();
+			var config = appController.obterConfiguracoes();
 			$("body").css("background-image","url(file:///" + config.background + ")");
 			$("body").css("background-size","100% 100%");
 		}
 		
 		function montarApps(){
 			var template = $("#template").html();
-			var view = controller.listarAplicativos();
+			var view = appController.listarAplicativos();
 			Mustache.parse(template);
 			var rendered = Mustache.render(template, view);
 			$("#target").html(rendered);
@@ -109,21 +84,6 @@
 					.css("position","relative")
 					.css("width", ((view.apps.length) * 256) + "px");
 			}
-		}
-		
-		function abrirConfiguracoes(){
-			win.close();
-			gui.Window.open('../configuracoes/configuracoes.html', {
-				  fullscreen: true,
-				  toolbar: false
-			});
-		}
-		
-		function abrirPopupDesligar(){
-			navegacao.removerNavegacao();
-			popupDesligar.openDialog(200, 1000);
-			navegacao = Navegacao(document);
-			navegacao.adicionarNavegacao("#popupDesligar input", true);
 		}
 		
 		function fechar(){
@@ -144,7 +104,7 @@
 			<tr>
 				{{#apps}}
 					<td>
-						<div class="app button" id="app-{{index}}" onclick="controller.executarAplicativo('{{local}}');" title="{{nome}}">
+						<div class="app button" id="app-{{index}}" onclick="appController.executarAplicativo('{{local}}');" title="{{nome}}">
 							<img src="{{imagem}}">
 						</div>
 					</td>
@@ -155,35 +115,11 @@
 	</script>
 </head>
 <body>
-	<div class="menu-superior">
-			<div class="menu botao-config" id="menu-1" onclick="abrirConfiguracoes();"></div>
-			<div class="menu botao-fechar" id="menu-2" onclick="abrirPopupDesligar();"></div>
-	</div>
+	<div class="menu-superior" id="menuSuperior"></div>
 	<div style="clear:both;"></div>
 	<div class="apps" id="target"></div>
 	<div class="rodape">
-		<div id="dataHora">
-
-		</div>
-	</div>
-	<div id="popupDesligar" class="popup">
-		<h3 class="subtitulo">Selecione a ação desejada:</h3>
-		<div class="botoes">
-			<table>
-				<tr>
-					<td><input type="button" class="botaoPopup" value="Fechar" onclick="fechar();"/></td>
-				</tr>
-				<tr>
-					<td><input type="button" class="botaoPopup" value="Desligar" onclick="menuController.desligar();"/></td>
-				</tr>
-				<tr>
-					<td><input type="button" class="botaoPopup" value="Reiniciar" onclick="menuController.reiniciar();"/></td>
-				</tr>
-				<tr>
-					<td><input type="button" class="botaoPopup" value="Suspender" onclick="menuController.suspender();"/></td>
-				</tr>
-			</table>
-		</div>
+		<div id="dataHora"></div>
 	</div>
 </body>
 </html>

@@ -5,17 +5,19 @@
 	<link rel="stylesheet" type="text/css" href="../../../css/configuracoes.css">
 	<script type="text/javascript" src="../../../js/jquery-1.11.2.js"></script>
 	<script type="text/javascript" src="../components/navegacao.js"></script>
+	<script type="text/javascript" src="../components/popup.js"></script>
 	<script type="text/javascript" src="../../controller/configuracoesController.js"></script>
-	<script type="text/javascript" src="../../../app/data/dao/aplicativosDAO.js"></script>
-	<script type="text/javascript" src="../../../app/data/dao/configuracoesDAO.js"></script>
 	<script type="text/javascript">
-		var controller = ConfiguracoesController();
+		var configController = new ConfiguracoesController();
+		var menuController = require("../../controller/menuController");
 		var gui = require('nw.gui');
 		var win = gui.Window.get();
 		var Mustache = require("mustache");
+		var navegacao;
+		var popupDesligar;
 		
 		function adicionarNavegacao(){
-			var navegacao = Navegacao(document);
+			navegacao = Navegacao(document);
 			navegacao
 				.adicionarNavegacao(".menu")
 				.adicionarNavegacao(".menuConfig", true);
@@ -41,21 +43,27 @@
 				$(this).attr("class", $(this).attr("class").replace("-selecionado",""));
 			});
 			$("#btnSalvarApp").click(function(){
-				controller.salvarApp(function(){
+				configController.salvarApp(function(){
 					montar();
 					mostrarAba($("#menuApps"));
 				});
 			});
 			$("#btnSalvarCfg").click(function(){
-				controller.salvarConfiguracoes(function(){
+				configController.salvarConfiguracoes(function(){
 					montar();
 					mostrarAba($("#menuApps"));
 				});
 			});
+			$("#popupDesligar input").on("ganhouSelecao", function(e){
+				$(this).css("background-image","linear-gradient(to right, #FFF, #CCC)");
+			});
+			$("#popupDesligar input").on("perdeuSelecao", function(e){
+				$(this).css("background-image","linear-gradient(#111, #000)");
+			});
 		}
 		
 		function excluirApp(indice){
-			controller.excluirApp(indice, function(){
+			configController.excluirApp(indice, function(){
 				montar();
 				mostrarAba($("#menuApps"));
 			});
@@ -67,9 +75,8 @@
 		}
 		
 		function montar(){
-			var dao = AplicativosDAO();
 			var template = $("#tmplApps").html();
-			var view = dao.listar();
+			var view = configController.listarAplicativos();
 			Mustache.parse(template);
 			var rendered = Mustache.render(template, view);
 			$("#aplicativos").html(rendered);
@@ -101,15 +108,23 @@
 			}
 		}
 		
+		function abrirPopupDesligar(){
+			navegacao.removerNavegacao();
+			popupDesligar.openDialog(200, 322);
+			navegacao = Navegacao(document);
+			navegacao.adicionarNavegacao("#popupDesligar input", true);
+		}
+		
 		$(document).ready(function(){
 			adicionarNavegacao();
 			configurarEventos();
+			popupDesligar = new Popup($("#popupDesligar"));
 		});
 	</script>
 </head>
 <body>
 	<div class="menu-superior">
-		<div class="menu botao-fechar" id="menu-2" onclick="fechar();"></div>
+		<div class="menu botao-fechar" id="menu-2" onclick="abrirPopupDesligar();"></div>
 	</div>
 	<div style="clear:both;"></div>
 	<div class="titulo">
@@ -146,7 +161,7 @@
 					</tbody>
 				</table>
 				<div class="botoes">
-					<input type="button" onclick="controller.novaApp()" value="Novo">
+					<input type="button" class="botaoDireita" onclick="configController.novaApp()" value="Novo">
 				</div>
 			</script>
 			<div class="aba" id="aplicativos" style="display:none"></div>
@@ -156,13 +171,13 @@
 					<table>
 						<tbody>
 							<tr>
-								<td>Nome:</td><td><input type="text" id="nome" name="nome" style="width:300px;"/></td>
+								<td>Nome:</td><td><input type="text" id="nome" name="nome" class="inputText" style="width:300px;"/></td>
 							</tr>
 							<tr>
 								<td>Local:</td>
 								<td style="display:inline;width:520px;" >
 									<input type="file" style="display:none;" id="local" name="local" onchange="carregarLocal(this);" accept=".lnk">
-									<input type="text" id="txtLocal" disabled="disabled" style="width:500px;">
+									<input type="text" id="txtLocal" disabled="disabled" class="inputText" style="width:500px;">
 								</td>
 								<td><a href="#" onclick="$('#local').click();"><img class="img-app" src="../../../resources/imagens/upload.png"></a></td>
 							</tr>
@@ -177,7 +192,7 @@
 					</table>
 				</form>
 				<div class="botoes">
-					<input type="button" id="btnSalvarApp" value="Salvar">
+					<input type="button" class="botaoDireita" id="btnSalvarApp" value="Salvar">
 				</div>
 			</div>
 			<div class="aba" id="aparencia" style="display:none;">
@@ -188,16 +203,35 @@
 							<td>Papel de parede:</td>
 							<td style="display:inline;width:520px;" >
 								<input type="file" style="display:none;" id="background" name="background" onchange="carregarBackground(this);">
-								<input type="text" id="txtBackground" disabled="disabled" style="width:500px;">
+								<input type="text" id="txtBackground" disabled="disabled" class="inputText" style="width:500px;">
 							</td>
 							<td><a href="#" onclick="$('#background').click();"><img class="img-app" src="../../../resources/imagens/upload.png"></a></td>
 						</tr>
 					</table>
 				</form>
 				<div class="botoes">
-					<input type="button" id="btnSalvarCfg" value="Salvar">
+					<input type="button" class="botaoDireita" id="btnSalvarCfg" value="Salvar">
 				</div>
 			</div>
+		</div>
+	</div>
+	<div id="popupDesligar" class="popup">
+		<h3 class="subtitulo">Selecione a ação desejada:</h3>
+		<div>
+			<table>
+				<tr>
+					<td><input type="button" value="Fechar" onclick="fechar();"/></td>
+				</tr>
+				<tr>
+					<td><input type="button" value="Desligar" onclick="menuController.desligar();"/></td>
+				</tr>
+				<tr>
+					<td><input type="button" value="Reiniciar" onclick="menuController.reiniciar();"/></td>
+				</tr>
+				<tr>
+					<td><input type="button" value="Suspender" onclick="menuController.suspender();"/></td>
+				</tr>
+			</table>
 		</div>
 	</div>
 </body>

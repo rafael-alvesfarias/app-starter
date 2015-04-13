@@ -63,28 +63,31 @@ h3{
 }
 
 input{
-	background-image: linear-gradient(#000820,#080828);
 	border: 2px solid;
 	border-radius: 5px;
 	border-color: #007FC1;
 	font-size: 18px;
-	padding-left: 8px;
 	color : #007FC1;
 }
 
-input:focus{
+input[type=text]{
+	background-image: linear-gradient(#000820,#080828);
+	padding-left: 8px;
+}
+
+input[type=text]:focus{
 	background-image: linear-gradient(to right, #FFF, #CCC);
 	border: 3px solid;
 	outline: 0;
 }
 
-.botoes input{
+input[type=button]{
 	background-image: linear-gradient(#111, #000);
 	border: 2px solid;
 	border-radius: 5px;
 }
 
-.botoes input:hover, .botoes input:focus{
+input[type=button]:hover, input[type=button]:focus{
 	background-image: linear-gradient(to right, #FFF, #CCC);
 	cursor: pointer;
 	outline: 0;
@@ -96,4 +99,14 @@ input:focus{
 
 #popupDesligar td{
 	text-align: center;
+}
+
+#popupDesligar div{
+	opacity: 0.8;
+}
+
+#popupDesligar input{
+	margin-top: 10px;
+	padding: 10px;
+	width: 160px;
 }

@@ -96,7 +96,7 @@ h2{
 	border-collapse: collapse;
 }
 
-#aplicativos td, th{
+#aplicativos td, #aplicativos th{
 	border: 1px solid #002451;
 	padding: 5px;
 	text-align: center;
@@ -114,9 +114,9 @@ h2{
 	border-collapse: collapse;
 }
 
-#novaApp td, th{
+#novaApp td, #novaApp th{
 	padding: 5px;
-	text-align: leflt;
+	text-align: left;
 	font-size: 18px;
 }
 
@@ -127,5 +127,8 @@ h2{
 
 .botoes input{
 	padding: 8px 40px;
+}
+
+.botaoDireita{
 	float: right;
 }

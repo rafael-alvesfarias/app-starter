@@ -4,7 +4,7 @@
  * Para adicionar funcionalidade quando um elemento navegável é selecionado, será necessário
  * escutar os eventos ganhouSelecao e perdeuSelecao.
  * @author Rafael Alves Farias
- * @param target - o alvo para vinculação com os elementos de teclado.
+ * @param target - o alvo para vinculação com os eventos de teclado.
  * @returns navegacao
  */
 Navegacao = function(target, cfg){
@@ -56,6 +56,7 @@ Navegacao = function(target, cfg){
 					}
 				}
 			}
+			
 			return this;
 		},
 		
@@ -71,6 +72,8 @@ Navegacao = function(target, cfg){
 				$(this).removeAttr("horizontal-index");
 				$(this).removeAttr("vertical-index");
 			});
+			$(target).unbind("keydown");
+			$(target).unbind("keyup");
 		},
 		
 		keyUp: function(event){
@@ -98,7 +101,6 @@ Navegacao = function(target, cfg){
 				case 38:
 					if(this.selecionado){
 						var indiceVertical = parseInt(this.selecionado.attr("vertical-index"));
-						var indiceHorizontal = parseInt(this.selecionado.attr("horizontal-index"));
 						var elementoSuperior = $("*[vertical-index='" + (indiceVertical - 1) + "'][horizontal-index='0']");
 						if(elementoSuperior.length){
 							this.selecionar(elementoSuperior, "cima");
@@ -122,7 +124,6 @@ Navegacao = function(target, cfg){
 				case 40:
 					if(this.selecionado){
 						var indiceVertical = parseInt(this.selecionado.attr("vertical-index"));
-						var indiceHorizontal = parseInt(this.selecionado.attr("horizontal-index"));
 						var elementoInferior = $("*[vertical-index='" + (indiceVertical + 1) + "'][horizontal-index='0']");
 						if(elementoInferior.length){
 							this.selecionar(elementoInferior, "baixo");
@@ -162,8 +163,6 @@ Navegacao = function(target, cfg){
 	
 	$("body").append("<audio src='" + config.audioSource + "' id='som_cursor'></audio>");
 	
-	$(target).unbind("keydown");
-	$(target).unbind("keyup");
 	$(target).keydown(function(event){
 		objeto.keyDown.call(objeto, event);
 	});

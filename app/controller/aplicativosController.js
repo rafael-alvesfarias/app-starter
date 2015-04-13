@@ -1,18 +1,19 @@
-function AplicativosController(){
-	var executor = require("executorComandos.js");
-	var aplicativosDAO = AplicativosDAO();
-	var configuracoesDAO = ConfiguracoesDAO();
-	return {
-		listarAplicativos: function(){
-			return aplicativosDAO.listar();
-		},
-		
-		obterConfiguracoes: function(){
-			return configuracoesDAO.obter();
-		},
-		
-		executarAplicativo: function(local){
-			executor(local).abrir();
-		}
-	};
-}
+var executor = require("executorComandos.js");
+var aplicativosDAO = require("../data/dao/aplicativosDAO.js");
+var configuracoesDAO = require("../data/dao/configuracoesDAO.js");
+
+/**
+ * Função responsável por listar todos os aplicativos
+ * @returns {JSONObject} - lista de todos os aplicativos
+ */
+exports.listarAplicativos = function(){
+	return aplicativosDAO.listar();
+};
+	
+exports.obterConfiguracoes = function(){
+	return configuracoesDAO.obter();
+};
+	
+exports.executarAplicativo = function(local){
+	executor(local).abrir();
+};
