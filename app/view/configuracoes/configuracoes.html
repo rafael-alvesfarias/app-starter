@@ -7,14 +7,14 @@
 	<script type="text/javascript" src="../components/navegacao.js"></script>
 	<script type="text/javascript" src="../components/popup.js"></script>
 	<script type="text/javascript" src="../../controller/configuracoesController.js"></script>
+	<script type="text/javascript" src="../menu/menuSuperior.js"></script>
+	<script type="text/javascript" src="../components/voltarHelper.js"></script>
 	<script type="text/javascript">
 		var configController = new ConfiguracoesController();
-		var menuController = require("../../controller/menuController");
 		var gui = require('nw.gui');
 		var win = gui.Window.get();
 		var Mustache = require("mustache");
-		var navegacao;
-		var popupDesligar;
+		var voltarHelper = new VoltarHelper();
 		
 		function adicionarNavegacao(){
 			navegacao = Navegacao(document);
@@ -24,23 +24,12 @@
 		}
 		
 		function configurarEventos(){
-			win.on('close', function() {
-				this.hide();
-				this.close(true);
-			});
-			$(document).on("voltar", voltar);
 			$(".menuConfig").on("ganhouSelecao", function(e){
 				$(this).addClass("menuConfigSelecionado");
 				$(this).click();
 			});
 			$(".menuConfig").on("perdeuSelecao", function(e){
 				$(this).removeClass("menuConfigSelecionado");
-			});
-			$(".menu").on("ganhouSelecao", function(e){
-				$(this).attr("class", $(this).attr("class") + "-selecionado");
-			});
-			$(".menu").on("perdeuSelecao", function(e){
-				$(this).attr("class", $(this).attr("class").replace("-selecionado",""));
 			});
 			$("#btnSalvarApp").click(function(){
 				configController.salvarApp(function(){
@@ -54,11 +43,19 @@
 					mostrarAba($("#menuApps"));
 				});
 			});
-			$("#popupDesligar input").on("ganhouSelecao", function(e){
-				$(this).css("background-image","linear-gradient(to right, #FFF, #CCC)");
+			voltarHelper.add(function(){
+				if(!$("input:focus").length){
+					win.close();
+					gui.Window.open('../aplicativos/aplicativos.html', {
+						  fullscreen: true,
+						  toolbar: false
+					});
+				}
 			});
-			$("#popupDesligar input").on("perdeuSelecao", function(e){
-				$(this).css("background-image","linear-gradient(#111, #000)");
+			$(document).on("voltar", voltarHelper.voltar);
+			win.on('close', function() {
+				this.hide();
+				this.close(true);
 			});
 		}
 		
@@ -98,34 +95,14 @@
 			win.close();
 		}
 		
-		function voltar(){
-			if(!$("input:focus").length){
-				win.close();
-				gui.Window.open('../aplicativos/aplicativos.html', {
-					  fullscreen: true,
-					  toolbar: false
-				});
-			}
-		}
-		
-		function abrirPopupDesligar(){
-			navegacao.removerNavegacao();
-			popupDesligar.openDialog(200, 322);
-			navegacao = Navegacao(document);
-			navegacao.adicionarNavegacao("#popupDesligar input", true);
-		}
-		
 		$(document).ready(function(){
-			adicionarNavegacao();
 			configurarEventos();
-			popupDesligar = new Popup($("#popupDesligar"));
+			carregarMenu(adicionarNavegacao, true);
 		});
 	</script>
 </head>
 <body>
-	<div class="menu-superior">
-		<div class="menu botao-fechar" id="menu-2" onclick="abrirPopupDesligar();"></div>
-	</div>
+	<div class="menu-superior" id="menuSuperior"></div>
 	<div style="clear:both;"></div>
 	<div class="titulo">
 		<h1>Configurações</h1>
@@ -213,25 +190,6 @@
 					<input type="button" class="botaoDireita" id="btnSalvarCfg" value="Salvar">
 				</div>
 			</div>
-		</div>
-	</div>
-	<div id="popupDesligar" class="popup">
-		<h3 class="subtitulo">Selecione a ação desejada:</h3>
-		<div>
-			<table>
-				<tr>
-					<td><input type="button" value="Fechar" onclick="fechar();"/></td>
-				</tr>
-				<tr>
-					<td><input type="button" value="Desligar" onclick="menuController.desligar();"/></td>
-				</tr>
-				<tr>
-					<td><input type="button" value="Reiniciar" onclick="menuController.reiniciar();"/></td>
-				</tr>
-				<tr>
-					<td><input type="button" value="Suspender" onclick="menuController.suspender();"/></td>
-				</tr>
-			</table>
 		</div>
 	</div>
 </body>

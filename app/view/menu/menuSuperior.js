@@ -2,11 +2,13 @@ var cfgNavegacao;
 var popupDesligar;
 var menuController = require("../../controller/menuController");
 
-function carregarMenu(cfgNav){
+function carregarMenu(cfgNav, hideBtnConfig){
+	var templateMenu = hideBtnConfig ? "menu-no-config" : "menu";
 	cfgNavegacao = cfgNav;
 	$.get("../menu/menu.html", function(template) {
-		var menuSuperior = Mustache.render($(template).filter('#menu').html());
+		var menuSuperior = Mustache.render($(template).filter("#" + templateMenu).html());
 		$("#menuSuperior").html(menuSuperior);
+		
 		$(".menu").on("ganhouSelecao", function(e){
 			$(this).attr("class", $(this).attr("class") + "-selecionado");
 		});
@@ -16,6 +18,7 @@ function carregarMenu(cfgNav){
 		
 		var popup = Mustache.render($(template).filter('#popup').html());
 		$("body").append(popup);
+		
 		popupDesligar = new Popup($("#popupDesligar"));
 		$("#popupDesligar input").on("ganhouSelecao", function(e){
 			$(this).css("background-image","linear-gradient(to right, #FFF, #CCC)");
@@ -32,7 +35,7 @@ function abrirPopupDesligar(){
 	popupDesligar.openDialog(200, 322);
 	navegacao = Navegacao(document);
 	navegacao.adicionarNavegacao("#popupDesligar input", true);
-	$(document).on("voltar", function(){
+	voltarHelper.add(function(){
 		if($("#popupDesligar").css("display") == "block"){
 			navegacao.removerNavegacao();
 			popupDesligar.closeDialog();

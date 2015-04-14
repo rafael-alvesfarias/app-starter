@@ -8,12 +8,13 @@
 	<script type="text/javascript" src="../components/relogio.js"></script>
 	<script type="text/javascript" src="../components/popup.js"></script>
 	<script type="text/javascript" src="../menu/menuSuperior.js"></script>
+	<script type="text/javascript" src="../components/voltarHelper.js"></script>
 	<script>
 		var gui = require('nw.gui');
 		var win = gui.Window.get();
 		var Mustache = require("mustache");
 		var appController = require("../../controller/aplicativosController");
-		var navegacao;
+		var voltarHelper = new VoltarHelper();
 		
 		$(document).ready(function(){
 			configurarPagina();
@@ -51,11 +52,13 @@
 					}
 				}
 			});
-
 			$(".app").on("perdeuSelecao", function(e){
 				$(this).removeClass("selecionado");
 				$("#titulo-app-" + $(this).attr("id").split("-")[1]).css("visibility","hidden");
 			});
+			
+			$(document).on("voltar", voltarHelper.voltar);
+			
 			win.on('close', function() {
 	  			this.hide();
 	  			this.close(true);
