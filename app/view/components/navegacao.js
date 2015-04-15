@@ -1,3 +1,5 @@
+var NAVEGACAO_INSTANCE = false;
+
 /**
  * Função responsável por construir um objeto de navegação para determinado alvo informado.
  * Permite que determinados seletores sejam navegáveis via teclado.
@@ -8,6 +10,9 @@
  * @returns navegacao
  */
 Navegacao = function(target, cfg){
+	if(NAVEGACAO_INSTANCE){
+		NAVEGACAO_INSTANCE.removerNavegacao();
+	}
 	var config = {
 		audioSource: "../../../resources/sons/cursor.ogg",
 		primeiroElemento: false
@@ -169,6 +174,8 @@ Navegacao = function(target, cfg){
 	$(target).keyup(function(event){
 		objeto.keyUp.call(objeto, event);
 	});
+	
+	NAVEGACAO_INSTANCE = objeto;
 	
 	return objeto;
 };

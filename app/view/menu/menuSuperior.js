@@ -1,10 +1,10 @@
-var cfgNavegacao;
+var callback;
 var popupDesligar;
 var menuController = require("../../controller/menuController");
 
-function carregarMenu(cfgNav, hideBtnConfig){
+function carregarMenu(funcCallback, hideBtnConfig){
 	var templateMenu = hideBtnConfig ? "menu-no-config" : "menu";
-	cfgNavegacao = cfgNav;
+	callback = funcCallback;
 	$.get("../menu/menu.html", function(template) {
 		var menuSuperior = Mustache.render($(template).filter("#" + templateMenu).html());
 		$("#menuSuperior").html(menuSuperior);
@@ -26,29 +26,21 @@ function carregarMenu(cfgNav, hideBtnConfig){
 		$("#popupDesligar input").on("perdeuSelecao", function(e){
 			$(this).css("background-image","linear-gradient(#111, #000)");
 		});
-		cfgNavegacao();
+		callback();
 	});
 }
 
 function abrirPopupDesligar(){
-	navegacao.removerNavegacao();
 	popupDesligar.openDialog(200, 322);
-	navegacao = Navegacao(document);
+	var navegacao = Navegacao(document);
 	navegacao.adicionarNavegacao("#popupDesligar input", true);
 	voltarHelper.add(function(){
 		if($("#popupDesligar").css("display") == "block"){
 			navegacao.removerNavegacao();
 			popupDesligar.closeDialog();
-			configurarNavegacao();
+			callback();
 		}
 	});
-}
-
-function fecharPopupDesligar(){
-	if($("#popupDesligar").css("display") == "block"){
-		popupDesligar.closeDialog();
-		cfgNavegacao();
-	}
 }
 
 function abrirConfiguracoes(){
