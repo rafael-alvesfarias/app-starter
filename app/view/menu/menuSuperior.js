@@ -1,12 +1,13 @@
 var callback;
 var popupDesligar;
 var menuController = require("../../controller/menuController");
+var mustache = require("mustache");
 
 function carregarMenu(funcCallback, hideBtnConfig){
 	var templateMenu = hideBtnConfig ? "menu-no-config" : "menu";
 	callback = funcCallback;
 	$.get("../menu/menu.html", function(template) {
-		var menuSuperior = Mustache.render($(template).filter("#" + templateMenu).html());
+		var menuSuperior = mustache.render($(template).filter("#" + templateMenu).html());
 		$("#menuSuperior").html(menuSuperior);
 		
 		$(".menu").on("ganhouSelecao", function(e){
