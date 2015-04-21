@@ -21,13 +21,13 @@ exports.excluir = function(id, success){
 	var json = JSON.parse(fs.readFileSync(arquivo, 'utf8'));
 	var novasApps = {"apps":[]};
 	var newIndex = 0;
-	$(json.apps).each(function(){
-		if(this.index != id){
+	json.apps.forEach(function(app){
+		if(app.index != id){
 			var novaApp = new Object();
-			novaApp.local = this.local;
-			novaApp.nome = this.nome;
+			novaApp.local = app.local;
+			novaApp.nome = app.nome;
 			novaApp.index = newIndex + 1;
-			novaApp.imagem = this.imagem;
+			novaApp.imagem = app.imagem;
 			novasApps.apps[newIndex] = novaApp;
 			newIndex++;
 		}
