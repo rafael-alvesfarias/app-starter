@@ -15,6 +15,7 @@
 		var Mustache = require("mustache");
 		var appController = require("../../controller/aplicativosController");
 		var voltarHelper = new VoltarHelper();
+		var server = require("../../../server/server");
 		
 		$(document).ready(function(){
 			configurarPagina();
@@ -22,10 +23,39 @@
 			configurarEventos();
 			relogio($("#dataHora"));
 			carregarMenu(configurarNavegacao);
+			server.start(controleRemoto);
 		});
 		
+		function controleRemoto(comando){
+			var comandos = {
+				left: function(){
+					navegacao.keyDown({keyCode:37});
+				},
+				up: function(){
+					navegacao.keyDown({keyCode:38});
+				},
+				right: function(){
+					navegacao.keyDown({keyCode:39});
+				},
+				down: function(){
+					navegacao.keyDown({keyCode:40});
+				},
+				enter: function(){
+					navegacao.keyDown({keyCode:13});
+				},
+				back: function(){
+					navegacao.keyUp({keyCode:8});
+				}
+			}
+			if(Object.keys(comandos).indexOf(comando)!= -1){
+				comandos[comando]();
+			}else{
+				console.log(comando);
+			}
+		}
+		
 		function configurarNavegacao(){
-			var navegacao = Navegacao(document, {
+			navegacao = Navegacao(document, {
 				primeiroElemento : $('#app-1')
 			});
 			navegacao.adicionarNavegacao(".menu")
