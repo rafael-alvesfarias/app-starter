@@ -15,7 +15,8 @@
 		var Mustache = require("mustache");
 		var appController = require("../../controller/aplicativosController");
 		var voltarHelper = new VoltarHelper();
-		var server = require("../../../server/server");
+		var ControleRemoto = require("../../../controleRemoto/controleRemoto");
+		var navegacao;
 		
 		$(document).ready(function(){
 			configurarPagina();
@@ -23,10 +24,10 @@
 			configurarEventos();
 			relogio($("#dataHora"));
 			carregarMenu(configurarNavegacao);
-			server.start(controleRemoto);
+			new ControleRemoto(controlador);
 		});
 		
-		function controleRemoto(comando){
+		function controlador(comando){
 			var comandos = {
 				left: function(){
 					navegacao.keyDown({keyCode:37});

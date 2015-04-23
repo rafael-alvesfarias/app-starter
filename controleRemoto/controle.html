@@ -66,9 +66,14 @@
 	<script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
 	<script>		
 		function controlar(comando){
-			$.get("http://10.0.0.109:3000/"+comando, function(data, status){
-		        console.log("Data: " + data + "\nStatus: " + status);
-		    });
+			$.ajax({
+				method: "POST",
+				url: "http://${enderecoServidor}/controle-remoto",
+				data: comando,
+				success: function(){
+					console.log("sucesso");
+				}
+			});
 		}
 	</script>
 </head>

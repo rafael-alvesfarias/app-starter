@@ -48,6 +48,6 @@ function abrirConfiguracoes(){
 	win.close();
 	gui.Window.open('../configuracoes/configuracoes.html', {
 		  fullscreen: true,
-		  toolbar: true
+		  toolbar: false
 	});
 }

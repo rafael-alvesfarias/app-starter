@@ -9,7 +9,7 @@ var NAVEGACAO_INSTANCE = false;
  * @param target - o alvo para vinculação com os eventos de teclado.
  * @returns navegacao
  */
-Navegacao = function(target, cfg){
+var Navegacao = function(target, cfg){
 	var config = {
 		audioSource: "../../../resources/sons/cursor.ogg",
 		primeiroElemento: false
