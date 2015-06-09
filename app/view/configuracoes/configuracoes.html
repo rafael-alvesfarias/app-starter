@@ -15,7 +15,6 @@
 		var win = gui.Window.get();
 		var Mustache = require("mustache");
 		var voltarHelper = new VoltarHelper();
-		var ControleRemoto = require("../../../controleRemoto/controleRemoto");
 		var navegacao;
 		
 		function adicionarNavegacao(){
@@ -63,6 +62,7 @@
 		
 		function excluirApp(indice){
 			configController.excluirApp(indice, function(){
+				console.log("excluiu");
 				montar();
 				mostrarAba($("#menuApps"));
 			});
@@ -74,11 +74,14 @@
 		}
 		
 		function montar(){
-			var template = $("#tmplApps").html();
-			var view = configController.listarAplicativos();
-			Mustache.parse(template);
-			var rendered = Mustache.render(template, view);
-			$("#aplicativos").html(rendered);
+			var success = function(aplicativos){
+				console.log(aplicativos);
+				var template = $("#tmplApps").html();
+				Mustache.parse(template);
+				var rendered = Mustache.render(template, aplicativos);
+				$("#aplicativos").html(rendered);
+			};
+			configController.listarAplicativos(success);
 		}
 		
 		function carregarLocal(chooser){
@@ -100,36 +103,7 @@
 		$(document).ready(function(){
 			configurarEventos();
 			carregarMenu(adicionarNavegacao, true);
-			new ControleRemoto(controlador);
 		});
-		
-		function controlador(comando){
-			var comandos = {
-				left: function(){
-					navegacao.keyDown({keyCode:37});
-				},
-				up: function(){
-					navegacao.keyDown({keyCode:38});
-				},
-				right: function(){
-					navegacao.keyDown({keyCode:39});
-				},
-				down: function(){
-					navegacao.keyDown({keyCode:40});
-				},
-				enter: function(){
-					navegacao.keyDown({keyCode:13});
-				},
-				back: function(){
-					navegacao.keyUp({keyCode:8});
-				}
-			}
-			if(Object.keys(comandos).indexOf(comando)!= -1){
-				comandos[comando]();
-			}else{
-				console.log(comando);
-			}
-		}
 	</script>
 </head>
 <body>
@@ -162,7 +136,7 @@
 							<tr>
 								<td>{{nome}}</td>
 								<td>{{local}}</td>
-								<td><img class="img-app" src="{{imagem}}"></td>
+								<td><img class="img-app" src="http://localhost:3000/app-starter/resources/imagens/{{imagem}}"></td>
 								<td><a href="#" onclick="excluirApp({{index}})"><img class="img-excluir" src="../../../resources/imagens/excluir.png"></a></td>
 							</tr>
 						{{/apps}}

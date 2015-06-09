@@ -1,5 +1,5 @@
 var configuracoesDAO = require("../../data/dao/configuracoesDAO");
-var appsDAO = require("../../data/dao/aplicativosDAO");
+var aplicativosService = require("../../service/aplicativosService");
 
 function ConfiguracoesController(){
 	this.novaApp = function(){
@@ -13,15 +13,11 @@ function ConfiguracoesController(){
 		app.nome = form.nome.value;
 		app.local = form.local.value;
 		app.imagem = form.imagem.value;
-		appsDAO.salvar(app, function(){
-			success();
-		});
+		aplicativosService.salvarAplicativo(app, success);
 	};
 		
 	this.excluirApp = function(id, success){
-		appsDAO.excluir(id, function(){
-			success();
-		});
+		aplicativosService.excluirAplicativo(id, success);
 	},
 		
 	this.salvarConfiguracoes = function(success){
@@ -33,7 +29,7 @@ function ConfiguracoesController(){
 		});
 	};
 		
-	this.listarAplicativos = function(){
-		return appsDAO.listar();
+	this.listarAplicativos = function(success){
+		aplicativosService.listarAplicativos(success);
 	};
 }

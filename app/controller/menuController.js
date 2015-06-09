@@ -1,13 +1,13 @@
-var executor = require("executorComandos.js");
+var executorService = require("../service/executorService.js");
 
 exports.desligar = function(){
-	executor("shutdown /s /t 0").executar();
+	executorService.executar("desligar");
 };
 
 exports.reiniciar = function(){
-	executor("shutdown /r /t 0").executar();
+	executorService.executar("reiniciar");
 };
 
 exports.suspender = function(){
-	executor("shutdown /h").executar();
+	executorService.executar("suspender");
 };

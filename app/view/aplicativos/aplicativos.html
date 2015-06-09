@@ -15,45 +15,16 @@
 		var Mustache = require("mustache");
 		var appController = require("../../controller/aplicativosController");
 		var voltarHelper = new VoltarHelper();
-		var ControleRemoto = require("../../../controleRemoto/controleRemoto");
 		var navegacao;
 		
 		$(document).ready(function(){
 			configurarPagina();
-			montarApps();
-			configurarEventos();
-			relogio($("#dataHora"));
-			carregarMenu(configurarNavegacao);
-			new ControleRemoto(controlador);
+			montarApps(function(){
+				configurarEventos();
+				relogio($("#dataHora"));
+				carregarMenu(configurarNavegacao);
+			});
 		});
-		
-		function controlador(comando){
-			var comandos = {
-				left: function(){
-					navegacao.keyDown({keyCode:37});
-				},
-				up: function(){
-					navegacao.keyDown({keyCode:38});
-				},
-				right: function(){
-					navegacao.keyDown({keyCode:39});
-				},
-				down: function(){
-					navegacao.keyDown({keyCode:40});
-				},
-				enter: function(){
-					navegacao.keyDown({keyCode:13});
-				},
-				back: function(){
-					navegacao.keyUp({keyCode:8});
-				}
-			}
-			if(Object.keys(comandos).indexOf(comando)!= -1){
-				comandos[comando]();
-			}else{
-				console.log(comando);
-			}
-		}
 		
 		function configurarNavegacao(){
 			navegacao = Navegacao(document, {
@@ -102,22 +73,25 @@
 			$("body").css("background-size","100% 100%");
 		}
 		
-		function montarApps(){
-			var template = $("#template").html();
-			var view = appController.listarAplicativos();
-			Mustache.parse(template);
-			var rendered = Mustache.render(template, view);
-			$("#target").html(rendered);
-			$(".app").each(function(index){
-				if(index < 4){
-					$(this).addClass("visivel");
+		function montarApps(callback){
+			var success = function(aplicativos){
+				var template = $("#template").html();
+				Mustache.parse(template);
+				var rendered = Mustache.render(template, aplicativos);
+				$("#target").html(rendered);
+				$(".app").each(function(index){
+					if(index < 4){
+						$(this).addClass("visivel");
+					}
+				});
+				if(aplicativos.apps.length > 4){
+					$(".apps table")
+						.css("position","relative")
+						.css("width", ((aplicativos.apps.length) * 256) + "px");
 				}
-			});
-			if(view.apps.length > 4){
-				$(".apps table")
-					.css("position","relative")
-					.css("width", ((view.apps.length) * 256) + "px");
+				callback();
 			}
+			appController.listarAplicativos(success);
 		}
 		
 		function fechar(){
@@ -138,8 +112,8 @@
 			<tr>
 				{{#apps}}
 					<td>
-						<div class="app button" id="app-{{index}}" onclick="appController.executarAplicativo('{{local}}');" title="{{nome}}">
-							<img src="{{imagem}}">
+						<div class="app button" id="app-{{index}}" onclick="appController.executarAplicativo('{{index}}');" title="{{nome}}">
+							<img src="http://localhost:3000/app-starter/resources/imagens/{{imagem}}">
 						</div>
 					</td>
 				{{/apps}}
