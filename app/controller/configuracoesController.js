@@ -13,6 +13,9 @@ function ConfiguracoesController(){
 		app.nome = form.nome.value;
 		app.local = form.local.value;
 		app.imagem = form.imagem.value;
+		aplicativosService.uploadFile(form.imagem.value, function(e) {
+			console.log("upload success");
+		});
 		aplicativosService.salvarAplicativo(app, success);
 	};
 		

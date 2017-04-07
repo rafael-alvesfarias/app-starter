@@ -46,8 +46,7 @@ function abrirPopupDesligar(){
 
 function abrirConfiguracoes(){
 	win.close();
-	gui.Window.open('../configuracoes/configuracoes.html', {
-		  fullscreen: true,
-		  toolbar: false
+	gui.Window.open('app/view/configuracoes/configuracoes.html', {
+		  fullscreen: true
 	});
 }

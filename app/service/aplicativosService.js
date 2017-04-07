@@ -1,6 +1,7 @@
 var http = require("http");
 var fs = require("fs");
 var path = require("path");
+var request = require("request");
 
 /**
  * Função responsável por listar todos os aplicativos
@@ -11,7 +12,7 @@ var path = require("path");
 exports.listarAplicativos = function(success) {
 	var options = {
 		host : 'localhost',
-		port : '3000',
+		port : '8089',
 		path : '/server/aplicativos'
 	};
 
@@ -39,7 +40,7 @@ exports.listarAplicativos = function(success) {
 exports.obterAplicativoPorId = function(id, success) {
 	var options = {
 		host : 'localhost',
-		port : '3000',
+		port : '8089',
 		path : '/server/aplicativos/' + id
 	};
 
@@ -63,19 +64,18 @@ exports.obterAplicativoPorId = function(id, success) {
  *            função de sucesso.
  */
 exports.salvarAplicativo = function(aplicativo, success) {
-	var nomeArquivo = aplicativo.imagem.split("\\").pop();
-	var caminho  = path.join("D:/Desenvolvimento/Workspaces/Node JS/app-starter-server/web_app/resources/imagens/", nomeArquivo); 
-	fs.createReadStream(aplicativo.imagem).pipe(fs.createWriteStream(caminho))
+	aplicativo.imagem = path.basename(aplicativo.imagem);
 	var data = JSON.stringify(aplicativo);
+	console.log("salvar aplicativo data:")
 	console.log(data);
 	var options = {
 		host : 'localhost',
-		port : '3000',
+		port : '8089',
 		path : '/server/aplicativos',
 		method : 'POST',
 		headers : {
 			'Content-Type': 'application/json',
-			'Content-Length': data.length
+			'Content-Length': Buffer.byteLength(data)
 		}
 	};
 
@@ -90,7 +90,6 @@ exports.salvarAplicativo = function(aplicativo, success) {
 			success(msg);
 		});
 	});
-	
 	req.write(data)
 	req.end();
 };
@@ -106,7 +105,7 @@ exports.salvarAplicativo = function(aplicativo, success) {
 exports.excluirAplicativo = function(id, success) {
 	var options = {
 		host : 'localhost',
-		port : '3000',
+		port : '8089',
 		path : '/server/aplicativos/' + id,
 		method : 'DELETE'
 	};
@@ -125,3 +124,22 @@ exports.excluirAplicativo = function(id, success) {
 	
 	req.end();
 };
+
+exports.uploadFile = function(fileName, success) {
+	console.log("fileName" + fileName);
+	var formData = {
+		image: fs.createReadStream(fileName)
+	};
+	var options = {
+		method: "POST",
+		uri: "http://localhost:8089/server/upload",
+		formData: formData
+	};
+	request(options, function(error, response, body) {
+		if (error) {
+			return console.error('upload failed:', err);
+		}
+		console.log('Upload successful!  Server responded with:', body);
+		success();
+	});
+}

@@ -47,9 +47,8 @@
 			voltarHelper.add(function(){
 				if(!$("input:focus").length){
 					win.close();
-					gui.Window.open('../aplicativos/aplicativos.html', {
-						  fullscreen: true,
-						  toolbar: false
+					gui.Window.open('app/view/aplicativos/aplicativos.html', {
+						  fullscreen: true
 					});
 				}
 			});
@@ -89,7 +88,7 @@
 		}
 		
 		function carregarImagem(chooser){
-			$("#previewImg").attr("src", $(chooser).val());
+			$("#previewImg").attr("src", "file://" + $(chooser).val());
 		}
 		
 		function carregarBackground(chooser){
@@ -136,7 +135,7 @@
 							<tr>
 								<td>{{nome}}</td>
 								<td>{{local}}</td>
-								<td><img class="img-app" src="http://localhost:3000/app-starter/resources/imagens/{{imagem}}"></td>
+								<td><img class="img-app" src="http://localhost:8089/images/{{imagem}}"></td>
 								<td><a href="#" onclick="excluirApp({{index}})"><img class="img-excluir" src="../../../resources/imagens/excluir.png"></a></td>
 							</tr>
 						{{/apps}}

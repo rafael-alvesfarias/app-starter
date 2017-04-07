@@ -1,8 +1,12 @@
 {
 	"name":"app-starter",
 	"window":{
-		"toolbar":false,
 		"fullscreen":true
 	},
-	"main":"app/view/aplicativos/aplicativos.html"
+	"main":"app/view/aplicativos/aplicativos.html",
+	"author": "rafael.farias",
+	"license": "ISC",
+	"dependencies": {
+  		"request": "^2.81.0"
+  	}
 }

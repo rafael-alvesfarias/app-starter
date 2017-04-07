@@ -7,7 +7,7 @@ var http = require("http");
 exports.abrirAplicativo = function(id){
 	var options = {
 		host : 'localhost',
-		port : '3000',
+		port : '8089',
 		path : '/server/executor/abrirAplicativo/' + id,
 		method : 'POST'
 	};
@@ -30,7 +30,7 @@ exports.abrirAplicativo = function(id){
 exports.executar = function(comando){
 	var options = {
 		host : 'localhost',
-		port : '3000',
+		port : '8089',
 		path : '/server/executor/executar/' + comando,
 		method : 'POST'
 	};
